@@ -28,3 +28,8 @@ def user_reg(request):
             aud.save()
             return HttpResponse("<script>alert('User Added Successfully');window.location='/login';</script>")
     return render(request,'user_reg.html')
+
+
+def user_view_nots(request):    
+    nots = notification.objects.all()
+    return render(request,'user_view_nots.html',{'nots':nots})

@@ -64,7 +64,7 @@ class Audience(models.Model):
     name = models.CharField(max_length=255)
     email = models.EmailField(unique=True)
     phone = models.CharField(max_length=20)
-    preferences = models.TextField()
+    preferences = models.CharField(max_length=225)
     login = models.ForeignKey('Login', on_delete=models.CASCADE)
 
 class Review(models.Model):
