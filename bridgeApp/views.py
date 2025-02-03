@@ -150,3 +150,7 @@ def admin_view_Review(request):
     revv=Review.objects.all()
     return render(request,'admin_view_Review.html',{'revv':revv})
     
+
+def admin_send_notification(request):
+
+    return render(request,'admin_send_notification.html')
