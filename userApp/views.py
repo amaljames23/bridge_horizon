@@ -1,6 +1,8 @@
 from django.shortcuts import render
 from bridgeApp.models import *
 from django.http import *
+from datetime import date
+
 
 # Create your views here.
 def user_home(request):
@@ -33,3 +35,21 @@ def user_reg(request):
 def user_view_nots(request):    
     nots = notification.objects.all()
     return render(request,'user_view_nots.html',{'nots':nots})
+
+
+def user_send_complaints(request):
+    try:
+        comp=complaint.objects.filter(senderid=request.session['login_id'])
+        print("GGGGGGGGGGGGGGGGGGGGGG")
+    except:
+        comp=None
+    if request.method=='POST':
+        com_plaint = request.POST['complaint']
+
+        login_id = Login.objects.get(login_id=request.session['login_id'])
+
+
+        comp=complaint(complaint=com_plaint,reply='pending',date=date.today(),senderid=login_id)
+        comp.save()
+        return HttpResponse("<script>alert('Complaint Send Successfully');window.location='/user_send_complaints';</script>")
+    return render(request,'user_send_complaints.html',{'complaints':comp})
