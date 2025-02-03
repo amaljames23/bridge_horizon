@@ -31,3 +31,5 @@ def theatre_registration(request):
 
 
     return render(request,'theatre_registration.html')
+
+
