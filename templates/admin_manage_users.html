@@ -1,0 +1,80 @@
+
+
+{%include 'admin_header.html'%}
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+
+    <form action="" method="post">
+
+        <table>
+            <tr>
+                <th>Name</th>
+                <td><input type="text" name="name"></td>
+            </tr>
+
+            <tr>
+                <th>Email</th>
+                <td><input type="email" name="mail" ></td>
+            </tr>
+
+            <tr>
+                <th>Phone</th>
+                <td><input type="text" name="phone"></td>
+            </tr>
+
+            <tr>
+                <th>Preferences</th>
+                <td><input type="text" name="per"></td>
+            </tr>
+
+            <tr>
+                <th>User Name</th>
+                <td><input type="text" name="uname" ></td>
+            </tr>
+
+            <tr>
+                <th>Password</th>
+                <td><input type="password" name="pass" ></td>
+            </tr>
+
+            <tr>
+                <td><input type="submit" name="add" ></td>
+            </tr>
+        </table>
+
+    </form>
+
+    <table border="2">
+
+        <tr>
+            <th>Sl.No</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>Preferences</th>
+        </tr>
+
+        {% for i in usr %}
+
+        <tr>
+            <td>{{ forloop.counter}}</td>
+            <td>{{i.name}}</td>
+            <td>{{i.email}}</td>
+            <td>{{i.phone}}</td>
+            <td>{{i.preferences}}</td>
+            <td><a href="/delete_user/{{i.audience_id}}">Delete</a></td>
+        </tr>
+
+        {%endfor%}
+    </table>
+</body>
+</html>
+
+{%include 'footer.html'%}

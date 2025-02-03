@@ -1,0 +1,38 @@
+
+{%include 'admin_header.html'%}
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <table border="2">
+
+        <tr>
+            <th>Sl.No</th>
+            <th>Fim Name</th>
+            <th>Review</th>
+            <th>Rating</th>
+            <th>Date</th>
+        </tr>
+
+        {%for i in revv%}
+
+        <tr>
+            <td>{{forloop.counter}}</td>
+            <th>{{i.film.film_name}}</th>
+            <td>{{i.review_text}}</td>
+            <td>{{i.rating}}</td>
+            <td>{{i.review_date}}</td>
+        </tr>
+
+        {%endfor%}
+
+    </table>
+
+</body>
+</html>
+
+{%include 'footer.html'%}

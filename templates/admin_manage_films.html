@@ -1,0 +1,94 @@
+
+{%include 'admin_header.html'%}
+
+    {% if fimupd %}
+
+    <form method="POST" enctype="multipart/form-data">
+        <table>
+            <tr>
+                <th>Film Name</th>
+                <td><input type="text" name="film" value="{{fimupd.film_name}}" ></td>
+            </tr>
+
+            <tr>
+                <th>Details</th>
+                <td><input type="text" name="deat" value="{{fimupd.deatils}}"></td>
+            </tr>
+
+            <tr>
+                <th>Image</th>
+                <td><input type="file" name="photo" required ></td>
+            </tr>
+
+            <tr>
+                <th>Release Date</th>
+                <td><input type="text" name="redate" value="{{fimupd.date}}"></td>
+            </tr>
+
+            <tr>
+                <td><input type="submit" name="add"></td>
+            </tr>
+        </table>
+    </form>
+
+
+{%else%}
+
+    
+
+    <form method="POST" enctype="multipart/form-data">
+        <table>
+            <tr>
+                <th>Film Name</th>
+                <td><input type="text" name="film" ></td>
+            </tr>
+
+            <tr>
+                <th>Details</th>
+                <td><input type="text" name="deat"></td>
+            </tr>
+
+            <tr>
+                <th>Image</th>
+                <td><input type="file" name="photo" required></td>
+            </tr>
+
+            <tr>
+                <th>Release Date</th>
+                <td><input type="text" name="redate"></td>
+            </tr>
+
+            <tr>
+                <td><input type="submit" name="add"></td>
+            </tr>
+        </table>
+    </form>
+
+
+    <table border="2">
+
+        <tr>
+            <th>Sl.No</th>
+            <th>Film Name</th>
+            <th>Details</th>
+            <th>Images</th>
+            <th>Release Date</th>
+        </tr>
+        {%for i in films%}
+        <tr>
+            <td>{{forloop.counter}}</td>
+            <td>{{i.film_name}}</td>
+            <td>{{i.deatils}}</td>
+            <td><img src="/static/image/{{i.photo}}" alt="image" height="250px" width="250px"></td>
+            <td>{{i.date}}</td>
+            <td><a href="/admin_update_films/{{i.filmid}}">Update</a></td>
+            <td><a href="/admin_delete_films/{{i.filmid}}">Delete</a></td>
+        </tr>
+
+        {%endfor%}
+    </table>
+    {%endif%}
+
+
+
+{%include 'footer.html'%}
