@@ -24,6 +24,8 @@ def login_form(request):
                 return HttpResponse("<script>alert('Login Successfully');window.location='/adminhome';</script>")
             if lg.usertype=='owner':
                 return HttpResponse("<script>alert('Login Successfully');window.location='/theatre_home';</script>")
+            if lg.usertype=='user':
+                return HttpResponse("<script>alert('Login Successfully');window.location='/user_home';</script>")
 
         except:
             return HttpResponse("<script>alert('Invalid Username Or Password');window.location='/login';</script>")
