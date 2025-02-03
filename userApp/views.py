@@ -6,7 +6,8 @@ from datetime import date
 
 # Create your views here.
 def user_home(request):
-    return render(request,'user_home.html')
+    films = film.objects.all()
+    return render(request,'user_home.html',{'films':films})
 
 def user_reg(request):
     if request.method=='POST':
