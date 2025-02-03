@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'bridgeApp',
     'theatre_app',
+    'userApp',
 ]
 
 MIDDLEWARE = [

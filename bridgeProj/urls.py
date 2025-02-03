@@ -20,4 +20,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('',include('bridgeApp.urls')),
     path('',include('theatre_app.urls')),
+    path('',include('userApp.urls')),
 ]
