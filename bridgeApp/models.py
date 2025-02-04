@@ -34,12 +34,7 @@ class Theater(models.Model):
     contact_email = models.EmailField()
     contact_phone = models.CharField(max_length=20)
 
-class TheaterSeat(models.Model):
-    seat_id = models.AutoField(primary_key=True)
-    theater = models.ForeignKey('Theater', on_delete=models.CASCADE)
-    seat_number = models.CharField(max_length=10)
-    seat_type = models.CharField(max_length=50)
-    status = models.CharField(max_length=20)
+
 
 class ScreeningSlot(models.Model):
     slot_id = models.AutoField(primary_key=True)
@@ -48,6 +43,14 @@ class ScreeningSlot(models.Model):
     start_time = models.TimeField()
     end_time = models.TimeField()
     date = models.DateField()
+    status = models.CharField(max_length=20)
+
+class TheaterSeat(models.Model):
+    seat_id = models.AutoField(primary_key=True)
+    theater = models.ForeignKey('Theater', on_delete=models.CASCADE)
+    slot = models.ForeignKey(ScreeningSlot, on_delete=models.CASCADE, default=None)
+    seat_number = models.CharField(max_length=10)
+    seat_type = models.CharField(max_length=50)
     status = models.CharField(max_length=20)
 
 class Payment(models.Model):

@@ -30,7 +30,7 @@
                 <td>{{ slot.end_time }}</td>
                 <td>{{ slot.date }}</td>
                 <td>{{ slot.status }}</td>
-                <td><a href="user_book_seats">Book Seats</a></td>
+                <td><a href="user_book_seats/{{ theater.theater_id }}/{{ slot.slot_id }}">Book Seats</a></td>
             </tr>
             {% endif %}
         {% endfor %}
