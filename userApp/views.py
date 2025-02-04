@@ -54,3 +54,9 @@ def user_send_complaints(request):
         comp.save()
         return HttpResponse("<script>alert('Complaint Send Successfully');window.location='/user_send_complaints';</script>")
     return render(request,'user_send_complaints.html',{'complaints':comp})
+
+
+def user_view_theaters(request):
+    theaters = Theater.objects.all()
+    screening_slots = ScreeningSlot.objects.all()
+    return render(request,'user_view_theaters.html',{'theaters':theaters, 'screening_slots': screening_slots})
