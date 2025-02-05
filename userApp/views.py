@@ -140,13 +140,24 @@ def user_seat_confirm(request):
 
 
 #######################################film maker
+from django.core.files.storage import FileSystemStorage
+
 def filmaker_reg(request):
     if request.method=='POST':
         name = request.POST['name']
         email = request.POST['email']  
         phone = request.POST['phone']
         password = request.POST['password']
-        prof_img = request.POST['prof_img']
+        photo = request.FILES['prof_img']
+
+        # photo=request.FILES['photo']
+        
+
+
+        fs= FileSystemStorage()
+        image=fs.save(photo.name,photo)
+
+
         bio = request.POST['bio']
         username = request.POST['username']
 
@@ -158,7 +169,7 @@ def filmaker_reg(request):
             lg=Login(username=username,password=password,usertype='film_maker')
             lg.save()
 
-            fm=Filmmaker(name=name,email=email,phone=phone,profile_img=prof_img,bio=bio,login_id=lg)
+            fm=Filmmaker(name=name,email=email,phone=phone,profile_image=image,bio=bio,login=lg)
             fm.save()
             return HttpResponse("<script>alert('Filmaker Added Successfully');window.location='/login';</script>")
     return render(request,'filmaker_reg.html')
@@ -321,7 +332,11 @@ def content_manager_reg(request):
         email = request.POST['email']  
         phone = request.POST['phone']
         password = request.POST['password']
-        profile_image = request.POST['profile_image']
+        photo = request.FILES['profile_image']
+
+        fs= FileSystemStorage()
+        image=fs.save(photo.name,photo)
+
         username = request.POST['username']
 
         try:
@@ -332,7 +347,7 @@ def content_manager_reg(request):
             lg = Login(username=username, password=password, usertype='content_manager')
             lg.save()
 
-            cm = ContentManager(name=name, email=email, phone=phone, profile_image=profile_image, login=lg)
+            cm = ContentManager(name=name, email=email, phone=phone, profile_image=image, login=lg)
             cm.save()
             return HttpResponse("<script>alert('Content Manager Added Successfully');window.location='/login';</script>")
 
