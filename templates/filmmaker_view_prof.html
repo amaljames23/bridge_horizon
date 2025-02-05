@@ -18,7 +18,7 @@
         <td>{{ i.email }}</td>
         <td>{{ i.phone }}</td>
         <td>
-            <img src="{{ i.profile_image.url }}" alt="Profile Image" width="50" height="50">
+            <img src="static/image/{{i.profile_image }}" alt="{{ i.profile_image }}" width="50" height="50">
         </td>
         <td>{{ i.bio }}</td>
         <td><a href="/film_update_profile/{{i.filmmaker_id}}">UPDATE</a></td>
