@@ -1,0 +1,35 @@
+
+
+
+
+{%include 'thearte_header.html'%}
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+
+    <table border="2">
+        <tr>
+            <th>Sl.No</th>
+            <th>Amount</th>
+            <th>Transaction Date</th>
+            <th>Status</th>
+        </tr>
+        {% for i in pmt %}
+        <tr>
+            <td>{{forloop.counter}}</td>
+            <td>{{i.amount}}</td>
+            <td>{{i.transaction_date}}</td>
+            <td>{{i.status}}</td>
+        </tr>
+        {%endfor%}
+    </table>
+    
+</body>
+</html>
+
+{%include 'footer.html'%}

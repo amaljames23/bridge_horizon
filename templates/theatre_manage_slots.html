@@ -1,0 +1,114 @@
+
+
+{%include 'thearte_header.html'%}
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+{% if upst %}
+    <form action="" method="post">
+        <table>
+            <tr>
+
+                <th>Fim Name</th>
+
+                <td>
+                <select name="flm" id="cat" class="form-input">
+                    {% for i in flm %}
+                    <option value="{{ i.filmid}}">{{ i.film_name}}</option>
+                    {% endfor %}
+                </select>
+
+            </td>
+            </tr>
+
+            <tr>
+                <th>Start Time</th>
+                <td><input type="time" name="stime"  value="{{upst.start_time}}"></td>
+            </tr>
+            <tr>
+                <th>End Time</th>
+                <td><input type="time" name="endtime" value="{{upst.end_time}}"></td>
+            </tr>
+
+            <tr>
+                <th>Date</th>
+                <td><input type="date" name="date" value="{{upst.date}}" ></td>
+            </tr>
+
+            <tr>
+                <td><input type="submit" name="add" ></td>
+            </tr>
+        </table>
+    </form>
+{% else %}
+
+    <form action="" method="post">
+        <table>
+            <tr>
+
+                <th>Fim Name</th>
+
+                <td>
+                <select name="flm" id="cat" class="form-input">
+                    {% for i in flm %}
+                    <option value="{{ i.filmid}}">{{ i.film_name}}</option>
+                    {% endfor %}
+                </select>
+
+            </td>
+            </tr>
+
+            <tr>
+                <th>Start Time</th>
+                <td><input type="time" name="stime"></td>
+            </tr>
+            <tr>
+                <th>End Time</th>
+                <td><input type="time" name="endtime"></td>
+            </tr>
+
+            <tr>
+                <th>Date</th>
+                <td><input type="date" name="date" ></td>
+            </tr>
+
+            <tr>
+                <td><input type="submit" name="add" ></td>
+            </tr>
+        </table>
+    </form>
+
+    <table border="2">
+        <tr>
+            <th>Sl.No</th>
+            <th>Film Name</th>
+            <th>Start Time</th>
+            <th>End Time</th>
+            <th>Date</th>
+        </tr>
+        {% for slot in st %}
+
+        <tr>
+            <td>{{forloop.counter}}</td>
+            <td>{{slot.film.film_name}}</td>
+            <td>{{slot.start_time}}</td>
+            <td>{{slot.end_time}}</td>
+            <td>{{slot.date}}</td>
+            <td><a href="/theatre_update_slots/{{slot.slot_id}}">Update</a></td>
+            <td><a href="/theatre_delete_slots/{{slot.slot_id}}">Delete</a></td>
+            <td><a href="/thearte_view_booking/{{slot.slot_id}}">View Bookings</a></td>
+        </tr>
+        {% endfor %}
+    </table>
+
+{% endif %}
+
+</body>
+</html>
+
+{%include 'footer.html'%}

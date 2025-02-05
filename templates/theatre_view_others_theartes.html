@@ -1,0 +1,41 @@
+
+
+{%include 'thearte_header.html'%}
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+
+    <table border="2">
+        <tr>
+            <th>SL.NO</th>
+            <th>Thearte Name</th>
+            <th>Location</th>
+            <th>Capacity</th>
+            <th>Email</th>
+            <th>Phone</th>
+        </tr>
+
+        {% for thearte in th %}
+
+        <tr>
+            <td>{{ forloop.counter}}</td>
+            <td>{{thearte.name}}</td>
+            <td>{{thearte.location}}</td>
+            <td>{{thearte.capacity}}</td>
+            <td>{{thearte.contact_email}}</td>
+            <td>{{thearte.contact_phone}}</td>
+          
+        </tr>
+        {% endfor %}
+    </table>
+
+    
+</body>
+</html>
+
+{%include 'footer.html'%}
