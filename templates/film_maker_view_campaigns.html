@@ -1,0 +1,25 @@
+{% include 'filmmaker_header.html' %}
+
+<h1>film maker view films</h1>
+
+<table border="1">
+    <tr>
+        <th>Sl.No</th>
+        <th>Date</th>
+        <th>Details</th>
+        <th>Film Name</th>
+        <th>Photo</th>
+    </tr>
+    {% for i in films %}
+    <tr>
+        <td>{{ forloop.counter }}</td>
+        <td>{{ i.date }}</td>
+        <td>{{ i.deatils }}</td>
+        <td>{{ i.film_name }}</td>
+        <td><img src="{{ i.photo.url }}" alt="Film Photo" width="100"></td>
+        <td><a href="/film_maker_view_campaigns_basedon_films/{{ i.film_id}}">view film campaigns</a></td>
+    </tr>
+    {% endfor %}
+</table>
+
+{% include 'footer.html' %}

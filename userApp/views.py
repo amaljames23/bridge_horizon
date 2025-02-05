@@ -256,3 +256,58 @@ def film_maker_seat_confirm(request):
         })
 
     return JsonResponse({"success": False, "error": "Invalid request"})
+
+
+def film_maker_view_campaigns(request):
+    films = film.objects.filter(login_id=request.session['fm_id'])
+    return render(request,'film_maker_view_campaigns.html',{'films':films})
+    # return render(request,'film_maker_view_campaigns.html')
+
+# def film_maker_view_campaigns_basedon_films(request,film_id):
+#     campaigns = MarketingCampaign.objects.filter(film=film_id)
+#     return render(request,'film_maker_view_campaigns_basedon_films.html',{'campaigns':campaigns})
+
+
+def film_maker_view_campaigns_basedon_films(request, film_id):
+    campaigns = MarketingCampaign.objects.filter(film=film_id)
+
+    # Fetch related Ad data for each campaign
+    campaign_data = []
+    for campaign in campaigns:
+        ads = Ad.objects.filter(campaign=campaign)
+        for ad in ads:
+            campaign_data.append({
+                'start_date': campaign.start_date,
+                'end_date': campaign.end_date,
+                'budget': campaign.budget,
+                'status': campaign.status,
+                'target_audience': ad.target_audience,
+                'platform': ad.platform,
+                'impressions': ad.impressions,
+                'clicks': ad.clicks
+            })
+
+    return render(request, 'film_maker_view_campaigns_basedon_films.html', {'campaigns': campaign_data})
+
+
+
+
+def film_update_profile(request,id):
+    a=Filmmaker.objects.get(filmmaker_id=id)
+    if'submit'in request.POST:
+        name=request.POST['name']
+        email=request.POST['email']
+        phone=request.POST['phone']
+        bio=request.POST['bio']
+
+        a.name=name
+        a.email=email
+        a.phone=phone
+        a.bio=bio
+
+        a.save()
+        return HttpResponse("<script>alert('FILMAKER PRODFILE UPDATED');window.location='/filmmaker_view_prof';</script>")
+
+
+
+    return render(request,"film_update_profile.html",{'a':a})

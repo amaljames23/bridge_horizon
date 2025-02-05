@@ -27,6 +27,8 @@ def login_form(request):
             if lg.usertype=='user':
                 return HttpResponse("<script>alert('Login Successfully');window.location='/user_home';</script>")
             if lg.usertype=='film_maker':
+                fm=Filmmaker.objects.get(login_id=lg.pk)
+                request.session['fm_id']=fm.pk
                 return HttpResponse("<script>alert('Login Successfully');window.location='/filmaker_home';</script>")
 
         except:

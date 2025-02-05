@@ -10,11 +10,15 @@ urlpatterns = [
     path('user_book_seats/<theater_id>/<screening_slot_id>',views.user_book_seats,name='user_book_seats'),
     path('user_seat_confirm/', views.user_seat_confirm, name='user_seat_confirm'),
     ################
-    path('filmaker_reg', views.filmaker_reg, name='filmaker_reg'),
+    path('filmaker_reg/', views.filmaker_reg, name='filmaker_reg'),
     path('filmaker_home/', views.filmaker_home, name='filmaker_home'),
     path('filmmaker_view_prof', views.filmmaker_view_prof, name='filmmaker_view_prof'),
     path('film_maker_view_theaters', views.film_maker_view_theaters, name='film_maker_view_theaters'),
     path('film_maker_book_seats/<theater_id>/<screening_slot_id>',views.film_maker_book_seats,name='film_maker_book_seats'),
     path('film_maker_seat_confirm/', views.film_maker_seat_confirm, name='film_maker_seat_confirm'),
+    path('film_maker_view_campaigns/', views.film_maker_view_campaigns, name='film_maker_view_campaigns'),
+    path('film_maker_view_campaigns_basedon_films/<film_id>', views.film_maker_view_campaigns_basedon_films, name='film_maker_view_campaigns_basedon_films'),
+        path('film_update_profile/<id>', views.film_update_profile, name='film_update_profile'),
+
 
 ]

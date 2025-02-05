@@ -21,6 +21,7 @@
             <img src="{{ i.profile_image.url }}" alt="Profile Image" width="50" height="50">
         </td>
         <td>{{ i.bio }}</td>
+        <td><a href="/film_update_profile/{{i.filmmaker_id}}">UPDATE</a></td>
     </tr>
     {% endfor %}
 </table>
