@@ -131,6 +131,7 @@ class complaint(models.Model):
 class film(models.Model):
     filmid=models.AutoField(primary_key=True)
     film_name=models.CharField(max_length=225)
+    filmmaker = models.ForeignKey('Filmmaker', on_delete=models.CASCADE,default=None)
     deatils=models.CharField(max_length=225)
     photo=models.FileField()
     date=models.CharField(max_length=225)

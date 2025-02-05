@@ -24,6 +24,10 @@ urlpatterns = [
     path('content_manager_reg', views.content_manager_reg, name='content_manager_reg'),
     path('content_manager_home', views.content_manager_home, name='content_manager_home'),
     path('conter_manager_view_prof', views.conter_manager_view_prof, name='conter_manager_view_prof'),
+    path('conter_manager_view_films_to_make_campaign', views.conter_manager_view_films_to_make_campaign, name='conter_manager_view_films_to_make_campaign'),
+    path('content_manager_manage_campaigns/<film_id>/<film_m_id>', views.content_manager_manage_campaigns, name='content_manager_manage_campaigns'),
+    path('update_campaign/<cam_id>', views.update_campaign, name='update_campaign'),
+    path('content_manager_view_review&ratings/<filmid>', views.content_manager_view_reviewratings, name='content_manager_view_review&ratings'),
     
 
 ]
