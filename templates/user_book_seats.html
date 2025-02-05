@@ -1,4 +1,47 @@
 {% include 'user_header.html' %}
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+
+<div class="modal fade" id="paymentModal" tabindex="-1" aria-labelledby="paymentModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="paymentModalLabel">Payment Details</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form id="paymentForm">
+            <div class="mb-3">
+              <label for="cardNumber" class="form-label">Card Number</label>
+              <input type="text" class="form-control" id="cardNumber" placeholder="1234 5678 9012 3456" maxlength="19">
+            </div>
+            <div class="row mb-3">
+              <div class="col-md-6">
+                <label for="expiryDate" class="form-label">Expiry Date</label>
+                <input type="text" class="form-control" id="expiryDate" placeholder="MM/YY" maxlength="5">
+              </div>
+              <div class="col-md-6">
+                <label for="cvv" class="form-label">CVV</label>
+                <input type="password" class="form-control" id="cvv" placeholder="123" maxlength="3">
+              </div>
+            </div>
+            <div class="mb-3">
+              <label for="cardHolder" class="form-label">Card Holder Name</label>
+              <input type="text" class="form-control" id="cardHolder" placeholder="John Doe">
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Total Amount</label>
+              <div class="form-control bg-light">₹<span id="modal-total-price">0</span></div>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" id="payButton">Pay Now</button>
+        </div>
+      </div>
+    </div>
+  </div>
 
 <style>
   /* Styling for the seat grid container */
@@ -90,41 +133,60 @@
 <script>
   document.addEventListener("DOMContentLoaded", function () {
     let selectedSeats = [];
-    let seatPrice = 150; // Price per seat
+    let seatPrice = 150;
+    let paymentModal;
 
-    // Add event listener to each available seat
+    // Initialize the Bootstrap modal
+    paymentModal = new bootstrap.Modal(document.getElementById('paymentModal'));
+
+    // Add event listeners for seats (your existing code)
     document.querySelectorAll(".seat.available").forEach((seat) => {
         seat.addEventListener("click", function () {
             let seatId = this.getAttribute("data-seat-id");
-
             if (this.classList.contains("selected")) {
-                // If seat is already selected, remove it
                 this.classList.remove("selected");
                 selectedSeats = selectedSeats.filter((id) => id !== seatId);
             } else {
-                // If seat is not selected, add it
                 this.classList.add("selected");
                 selectedSeats.push(seatId);
             }
-
-            // Update the total price
             updateTotalPrice();
         });
     });
 
-    // Function to update the total price based on selected seats
     function updateTotalPrice() {
         let totalPrice = selectedSeats.length * seatPrice;
         document.getElementById("total-price").textContent = totalPrice;
+        document.getElementById("modal-total-price").textContent = totalPrice;
     }
 
-    // Handle the booking button click
+    // Update the book button click handler
     document.getElementById("book-btn").addEventListener("click", function () {
         if (selectedSeats.length === 0) {
             alert("Please select at least one seat!");
             return;
         }
+        paymentModal.show();
+    });
 
+    // Format card number input with spaces
+    document.getElementById("cardNumber").addEventListener("input", function(e) {
+        let value = e.target.value.replace(/\s/g, "");
+        let formattedValue = value.replace(/(\d{4})/g, "$1 ").trim();
+        e.target.value = formattedValue;
+    });
+
+    // Format expiry date input
+    document.getElementById("expiryDate").addEventListener("input", function(e) {
+        let value = e.target.value.replace(/\D/g, "");
+        if (value.length >= 2) {
+            value = value.slice(0,2) + "/" + value.slice(2);
+        }
+        e.target.value = value;
+    });
+
+    // Handle payment submission
+    document.getElementById("payButton").addEventListener("click", function() {
         let screeningSlotId = document
             .getElementById("seat-container")
             .getAttribute("data-screening-slot");
@@ -133,9 +195,13 @@
             seats: selectedSeats,
             total_amount: selectedSeats.length * seatPrice,
             screening_slot_id: screeningSlotId,
+            payment_details: {
+                card_number: document.getElementById("cardNumber").value.replace(/\s/g, ""),
+                expiry_date: document.getElementById("expiryDate").value,
+                card_holder: document.getElementById("cardHolder").value
+            }
         };
 
-        // Sending the selected seats data to the backend for confirmation
         fetch("/user_seat_confirm/", {
             method: "POST",
             headers: {
@@ -143,22 +209,25 @@
             },
             body: JSON.stringify(requestData),
         })
-            .then((response) => response.json())
-            .then((data) => {
-                if (data.success) {
-                    alert("Seats booked successfully!");
-                    location.reload(); // Reload the page after successful booking
-                } else {
-                    alert("Booking failed! " + (data.error || "Try again later."));
-                }
-            })
-            .catch((error) => {
-                console.error("Error:", error);
-                alert("An error occurred while booking seats.");
-            });
+        .then((response) => response.json())
+        .then((data) => {
+            paymentModal.hide();
+            if (data.success) {
+                alert("Payment successful! Seats booked.");
+                location.reload();
+            } else {
+                alert("Booking failed! " + (data.error || "Try again later."));
+            }
+        })
+        .catch((error) => {
+            console.error("Error:", error);
+            alert("An error occurred while processing payment.");
+            paymentModal.hide();
+        });
     });
 });
 
 </script>
 
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 {% include 'footer.html' %}
