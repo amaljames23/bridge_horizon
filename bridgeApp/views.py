@@ -30,6 +30,10 @@ def login_form(request):
                 fm=Filmmaker.objects.get(login_id=lg.pk)
                 request.session['fm_id']=fm.pk
                 return HttpResponse("<script>alert('Login Successfully');window.location='/filmaker_home';</script>")
+            if lg.usertype=='content_manager':
+                fm=ContentManager.objects.get(login_id=lg.pk)
+                request.session['cm_id']=fm.pk
+                return HttpResponse("<script>alert('Login Successfully');window.location='/content_manager_home';</script>")
 
         except:
             return HttpResponse("<script>alert('Invalid Username Or Password');window.location='/login';</script>")

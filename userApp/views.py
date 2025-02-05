@@ -337,3 +337,12 @@ def content_manager_reg(request):
             return HttpResponse("<script>alert('Content Manager Added Successfully');window.location='/login';</script>")
 
     return render(request,"content_manager_reg.html")
+
+
+def content_manager_home(request):
+    return render(request,"content_manager_home.html")
+
+
+def conter_manager_view_prof(request):
+    manager = ContentManager.objects.filter(login=request.session['login_id'])
+    return render(request,'conter_manager_view_prof.html',{'maker':manager})

@@ -22,6 +22,8 @@ urlpatterns = [
 
     #####################content manager#####################
     path('content_manager_reg', views.content_manager_reg, name='content_manager_reg'),
+    path('content_manager_home', views.content_manager_home, name='content_manager_home'),
+    path('conter_manager_view_prof', views.conter_manager_view_prof, name='conter_manager_view_prof'),
     
 
 ]
