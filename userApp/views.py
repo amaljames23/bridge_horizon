@@ -119,7 +119,7 @@ def user_seat_confirm(request):
                 seat=seat,
                 audience=aud_id,  # You can set this to the audience if applicable
                 filmmaker=None,  # You can set this to the filmmaker if applicable
-                payment_status="pending",  # Set the payment status as "pending" initially
+                payment_status="paid",  # Set the payment status as "pending" initially
                 booking_date=timezone.now()  # Set the booking date to the current time
             )
             seat.status = "booked"  # Mark each seat as booked
@@ -138,3 +138,121 @@ def user_seat_confirm(request):
 
     return JsonResponse({"success": False, "error": "Invalid request"})
 
+
+#######################################film maker
+def filmaker_reg(request):
+    if request.method=='POST':
+        name = request.POST['name']
+        email = request.POST['email']  
+        phone = request.POST['phone']
+        password = request.POST['password']
+        prof_img = request.POST['prof_img']
+        bio = request.POST['bio']
+        username = request.POST['username']
+
+        try:
+            lg=Login.objects.get(username=username,password=password)
+            if lg:
+                return HttpResponse("<script>alert('UserName Already Exist');window.location='/filmaker_reg';</script>")
+        except:
+            lg=Login(username=username,password=password,usertype='film_maker')
+            lg.save()
+
+            fm=Filmmaker(name=name,email=email,phone=phone,profile_img=prof_img,bio=bio,login_id=lg)
+            fm.save()
+            return HttpResponse("<script>alert('Filmaker Added Successfully');window.location='/login';</script>")
+    return render(request,'filmaker_reg.html')
+
+
+def filmaker_home(request):
+    films = film.objects.all()
+    return render(request,'filmaker_home.html',{'films':films})
+
+
+def filmmaker_view_prof(request):
+    maker = Filmmaker.objects.filter(login=request.session['login_id'])
+    return render(request,'filmmaker_view_prof.html',{'maker':maker})
+
+
+def film_maker_view_theaters(request):  
+    theaters = Theater.objects.all()
+    screening_slots = ScreeningSlot.objects.all()  
+    return render(request,'film_maker_view_theaters.html',{'theaters':theaters, 'screening_slots': screening_slots})
+
+
+def film_maker_book_seats(request, theater_id, screening_slot_id):
+    # Fetch seats related to the selected screening slot
+    seats = TheaterSeat.objects.filter(slot_id=screening_slot_id)
+
+    return render(request, 'film_maker_book_seats.html', {'seats': seats, 'screening_slot_id': screening_slot_id})
+
+
+
+import json
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+from django.utils import timezone
+# from .models import TheaterSeat, SeatBooking, ScreeningSlot
+
+@csrf_exempt  # Use if you're not handling CSRF tokens in your frontend (not recommended for production)
+def film_maker_seat_confirm(request):
+    if request.method == "POST":
+        # Parse the incoming JSON data from the frontend
+        data = json.loads(request.body)
+        selected_seats = data.get("seats", [])
+        total_amount = data.get("total_amount", 0)
+        screening_slot_id = data.get("screening_slot_id")
+
+        print(selected_seats, "&&&&&&&&&&&&&&&")
+
+        # Fetch the screening slot from the database using the correct field (assuming slot_id is the correct field)
+        try:
+            screening_slot = ScreeningSlot.objects.get(slot_id=screening_slot_id)  # Use slot_id instead of id
+        except ScreeningSlot.DoesNotExist:
+            return JsonResponse({"success": False, "error": "Screening slot not found."})
+
+        # Check if all seats exist and are available
+        seats_to_book = []
+        unavailable_seats = []
+        
+        for seat_id in selected_seats:
+            try:
+                seat = TheaterSeat.objects.get(seat_id=seat_id, status="available")  # Ensure the seat is available
+                seats_to_book.append(seat)
+                print(seats_to_book, "((((((((()))))))))")
+            except TheaterSeat.DoesNotExist:
+                # If any seat doesn't exist or isn't available, add to the unavailable list
+                unavailable_seats.append(seat_id)
+
+        # If there are unavailable seats, return an error message
+        if unavailable_seats:
+            return JsonResponse({"success": False, "error": f"Seats {', '.join(map(str, unavailable_seats))} are not available or do not exist."})
+
+        # Proceed with booking the seats
+        aud_id=Filmmaker.objects.get(login_id=request.session['login_id'])
+        booked_seats = []
+        for seat in seats_to_book:
+            # Create a SeatBooking entry for each seat
+            SeatBooking.objects.create(
+                slot=screening_slot,
+                seat=seat,
+                audience=None,  # You can set this to the audience if applicable
+                filmmaker=aud_id,  # You can set this to the filmmaker if applicable
+                payment_status="paid",  # Set the payment status as "pending" initially
+                booking_date=timezone.now()  # Set the booking date to the current time
+            )
+            seat.status = "booked"  # Mark each seat as booked
+            seat.save()
+            booked_seats.append(seat.seat_id)  # Add the seat_id to the list of booked seats
+
+        # Optionally, you can store the booking transaction in a separate model, if needed
+        # For example, you can create a Booking object here if you want to track the entire booking process.
+
+        return JsonResponse({
+            "success": True, 
+            "message": "Seats booked successfully!", 
+            "booked_seats": booked_seats,  # Optionally return the booked seats
+            "total_amount": total_amount  # Optionally return the total amount for the booking
+        })
+
+    return JsonResponse({"success": False, "error": "Invalid request"})

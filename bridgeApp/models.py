@@ -11,10 +11,10 @@ class Login(models.Model):
 class Filmmaker(models.Model):
     filmmaker_id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=255)
-    email = models.EmailField(unique=True)
+    email = models.CharField(max_length=255)
     phone = models.CharField(max_length=20)
-    profile_image = models.ImageField(upload_to='profile_images/')
-    bio = models.TextField()
+    profile_image = models.CharField(max_length=255)
+    bio = models.CharField(max_length=255)
     login = models.ForeignKey('Login', on_delete=models.CASCADE)
 
 class TheaterOwner(models.Model):
