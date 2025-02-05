@@ -311,3 +311,29 @@ def film_update_profile(request,id):
 
 
     return render(request,"film_update_profile.html",{'a':a})
+
+
+
+###########################content manager############################3
+def content_manager_reg(request):
+    if request.method == 'POST':
+        name = request.POST['name']
+        email = request.POST['email']  
+        phone = request.POST['phone']
+        password = request.POST['password']
+        profile_image = request.POST['profile_image']
+        username = request.POST['username']
+
+        try:
+            lg = Login.objects.get(username=username, password=password)
+            if lg:
+                return HttpResponse("<script>alert('UserName Already Exist');window.location='/signup';</script>")
+        except Login.DoesNotExist:
+            lg = Login(username=username, password=password, usertype='content_manager')
+            lg.save()
+
+            cm = ContentManager(name=name, email=email, phone=phone, profile_image=profile_image, login=lg)
+            cm.save()
+            return HttpResponse("<script>alert('Content Manager Added Successfully');window.location='/login';</script>")
+
+    return render(request,"content_manager_reg.html")
