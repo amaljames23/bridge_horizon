@@ -15,5 +15,9 @@ urlpatterns = [
     path('theatre_delete_slots/<id>',views.theatre_delete_slots,name='theatre_delete_slots'),
     path('thearte_view_booking/<id>',views.thearte_view_booking,name='thearte_view_booking'),
     path('theatre_view_payment_details/<id>',views.theatre_view_payment_details,name='theatre_view_payment_details'),
+    path('theatre_view_producers',views.theatre_view_producers,name='theatre_view_producers'),
+    path('theatre_chat/<id>',views.theatre_chat,name='theatre_chat'),
+    path('theatre_view_producermsg',views.theatre_view_producermsg,name='theatre_view_producermsg'),
+     path('theatre_insert_theatrechat/<msg>',views.theatre_insert_theatrechat,name='theatre_insert_theatrechat'),
 
 ]

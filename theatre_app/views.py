@@ -1,7 +1,9 @@
-from django.http import HttpResponse
+import datetime
+from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render
 from bridgeApp.models import *
 from django.core.files.storage import FileSystemStorage
+from django.db.models import Q
 
 # Create your views here.
 
@@ -161,3 +163,65 @@ def thearte_view_booking(request,id):
 def theatre_view_payment_details(request,id):
     pmt=Payment.objects.filter(booking_id=id)
     return render(request,'theatre_view_payment_details.html',{'pmt':pmt})
+
+
+def theatre_view_producers(request):
+    pro=Filmmaker.objects.all()
+    return render(request,'theatre_view_producers.html',{'pro':pro})
+
+
+
+def theatre_chat(request,id):
+    owner_id=id
+    request.session["owner_id"]=owner_id
+    from_id=request.session['login_id']
+    print("hiiiiiiiiii",owner_id,from_id)
+    return render(request,'theatre_chat_producers.html',{"toid":id})
+
+
+
+def theatre_view_producermsg(request):
+    print("###")
+    current_theatre_id = request.session['login_id']
+    print("&&&&&&&&&")
+    a=[]
+    chat_messages = chat.objects.filter(
+        Q(fromid=current_theatre_id, toid=request.session['owner_id']) | Q(fromid=request.session['owner_id'], toid=current_theatre_id)
+    )
+    for i in chat_messages:
+        a.append({"chat_id":i.chatid,"from_id":i.fromid,"message":i.message,"date_time":i.date})
+    p=Filmmaker.objects.get(login_id=request.session["owner_id"])
+    print(chat_messages,p.name)
+    first_name=p.name+" "
+    print(a)
+    return JsonResponse({'data':a,'first_name':first_name,'photo':"/static/image/chat_profile.jpg"})
+
+
+def theatre_insert_theatrechat(request, msg):
+    try:
+        # Verify session variables exist
+        from_id = request.session.get('login_id')
+        to_id = request.session.get('owner_id')
+
+        print("from_id",from_id)
+        print("to_id",to_id)
+        
+        # Add error handling
+        if not from_id or not to_id:
+            return JsonResponse({'status': 'error', 'message': 'Missing session variables'})
+        
+        # Create and save chat object
+        new_chat = chat(
+            fromid=from_id, 
+            toid=to_id, 
+            message=msg, 
+            date=datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        )
+        new_chat.save()
+        
+        return JsonResponse({'status': "ok"})
+    
+    except Exception as e:
+        # Log the error and return an error response
+        print(f"Error inserting chat message: {e}")
+        return JsonResponse({'status': 'error', 'message': str(e)})
