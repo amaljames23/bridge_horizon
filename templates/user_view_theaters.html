@@ -1,0 +1,43 @@
+{% include 'user_header.html' %}
+
+<h1>Theaters</h1>
+<table>
+    <tr>
+        <th>Sl.No</th>
+        <th>Name</th>
+        <th>Location</th>
+        <th>Capacity</th>
+        <th>Contact Email</th>
+        <th>Contact Phone</th>
+        <th>Start Time</th>
+        <th>End Time</th>
+        <th>Date</th>
+        <th>Status</th>
+        <th>Action</th>
+    </tr>
+    
+    {% for theater in theaters %}
+        {% for slot in screening_slots %}
+            {% if slot.theater == theater %}
+            <tr>
+                <td>{{ forloop.parentloop.counter }}</td>
+                <td>{{ theater.name }}</td>
+                <td>{{ theater.location }}</td>
+                <td>{{ theater.capacity }}</td>
+                <td>{{ theater.contact_email }}</td>
+                <td>{{ theater.contact_phone }}</td>
+                <td>{{ slot.start_time }}</td>
+                <td>{{ slot.end_time }}</td>
+                <td>{{ slot.date }}</td>
+                <td>{{ slot.status }}</td>
+                <td><a href="user_book_seats/{{ theater.theater_id }}/{{ slot.slot_id }}">Book Seats</a></td>
+                <td><a href="use_add_rating/{{ slot.film_id }}">add rating</a></td>
+            </tr>
+            {% endif %}
+        {% endfor %}
+    {% endfor %}
+</table>
+
+
+
+{% include 'footer.html' %}

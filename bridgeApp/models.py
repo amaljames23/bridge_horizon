@@ -11,10 +11,10 @@ class Login(models.Model):
 class Filmmaker(models.Model):
     filmmaker_id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=255)
-    email = models.EmailField(unique=True)
+    email = models.CharField(max_length=255)
     phone = models.CharField(max_length=20)
-    profile_image = models.ImageField(upload_to='profile_images/')
-    bio = models.TextField()
+    profile_image = models.CharField(max_length=255)
+    bio = models.CharField(max_length=255)
     login = models.ForeignKey('Login', on_delete=models.CASCADE)
 
 class TheaterOwner(models.Model):
@@ -34,12 +34,7 @@ class Theater(models.Model):
     contact_email = models.EmailField()
     contact_phone = models.CharField(max_length=20)
 
-class TheaterSeat(models.Model):
-    seat_id = models.AutoField(primary_key=True)
-    theater = models.ForeignKey('Theater', on_delete=models.CASCADE)
-    seat_number = models.CharField(max_length=10)
-    seat_type = models.CharField(max_length=50)
-    status = models.CharField(max_length=20)
+
 
 class ScreeningSlot(models.Model):
     slot_id = models.AutoField(primary_key=True)
@@ -48,6 +43,14 @@ class ScreeningSlot(models.Model):
     start_time = models.TimeField()
     end_time = models.TimeField()
     date = models.DateField()
+    status = models.CharField(max_length=20)
+
+class TheaterSeat(models.Model):
+    seat_id = models.AutoField(primary_key=True)
+    theater = models.ForeignKey('Theater', on_delete=models.CASCADE)
+    slot = models.ForeignKey(ScreeningSlot, on_delete=models.CASCADE, default=None)
+    seat_number = models.CharField(max_length=10)
+    seat_type = models.CharField(max_length=50)
     status = models.CharField(max_length=20)
 
 class Payment(models.Model):
@@ -64,16 +67,16 @@ class Audience(models.Model):
     name = models.CharField(max_length=255)
     email = models.EmailField(unique=True)
     phone = models.CharField(max_length=20)
-    preferences = models.TextField()
+    preferences = models.CharField(max_length=225)
     login = models.ForeignKey('Login', on_delete=models.CASCADE)
 
 class Review(models.Model):
     review_id = models.AutoField(primary_key=True)
     audience = models.ForeignKey('Audience', on_delete=models.CASCADE)
     film = models.ForeignKey('Film', on_delete=models.CASCADE)
-    rating = models.IntegerField()
-    review_text = models.TextField()
-    review_date = models.DateTimeField()
+    rating = models.CharField(max_length=255)
+    review_text = models.CharField(max_length=255)
+    review_date = models.CharField(max_length=255)
 
 class SeatBooking(models.Model):
     booking_id = models.AutoField(primary_key=True)
@@ -108,9 +111,9 @@ class Ad(models.Model):
 class ContentManager(models.Model):
     manager_id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=255)
-    email = models.EmailField(unique=True)
+    email = models.CharField(max_length=255)
     phone = models.CharField(max_length=20)
-    profile_image = models.ImageField(upload_to='profile_images/')
+    profile_image = models.CharField(max_length=255)
     login = models.ForeignKey('Login', on_delete=models.CASCADE)
 
 
@@ -128,6 +131,7 @@ class complaint(models.Model):
 class film(models.Model):
     filmid=models.AutoField(primary_key=True)
     film_name=models.CharField(max_length=225)
+    filmmaker = models.ForeignKey('Filmmaker', on_delete=models.CASCADE,default=None)
     deatils=models.CharField(max_length=225)
     photo=models.FileField()
     date=models.CharField(max_length=225)

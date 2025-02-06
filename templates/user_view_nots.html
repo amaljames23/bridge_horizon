@@ -1,0 +1,21 @@
+{% include 'user_header.html' %}
+
+<h1>Notifications</h1>
+<table>
+    <tr>
+        <th>Sl.No</th>
+        <th>Title</th>
+        <th>Notification</th>
+        <th>Date</th>
+    </tr>
+    {% for i in nots %}
+    <tr>
+        <td>{{forloop.counter}}</td>
+        <td>{{i.title}}</td>
+        <td>{{i.notification}}</td>
+        <td>{{i.date}}</td>
+    </tr>
+    {% endfor %}
+</table>
+
+{% include 'footer.html' %}

@@ -1,11 +1,24 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
+{% include 'user_header.html' %}
     <h1>welcome user...</h1>
-</body>
-</html>
+    <br><br><br>
+    <table border="1">
+        <tr>
+            <th>Sl.No</th>
+            <th>Date</th>
+            <th>Details</th>
+            <th>Film Name</th>
+            <th>Photo</th>
+        </tr>
+        {% for i in films %}
+        <tr>
+            <td>{{ forloop.counter }}</td>
+            <td>{{ i.date }}</td>
+            <td>{{ i.deatils }}</td>
+            <td>{{ i.film_name }}</td>
+            <td><img src="{{ i.photo.url }}" alt="Film Photo" width="100"></td>
+            <td><a href="user_view_theaters">Theaters</a></td>
+        </tr>
+        {% endfor %}
+    </table>
+    
+{% include 'footer.html' %}

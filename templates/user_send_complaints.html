@@ -1,0 +1,126 @@
+{% include 'user_header.html' %}
+
+    <style>
+        .main-container {
+            font-family: Arial, sans-serif;
+            background: #f4f4f4;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center; 
+            height: 100vh; 
+            margin: 0;
+        }
+        .container {
+            display: flex;
+            /* height: 100vh; */
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            width: 650px;
+            align-items: center;
+            gap: 20px; /* Ensures spacing between image and form */
+        }
+        .image-container {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .image-container img {
+            width: 150px; /* Adjust size */
+            height: auto;
+        }
+        .form-container {
+            flex: 2;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 15px; 
+        }
+        h2 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 10px;
+        }
+        label {
+            font-weight: bold;
+            color: #444;
+        }
+        textarea {
+            width: 95%;
+            height: 100px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 14px;
+            resize: none;
+            margin: 10px 0px 10px 0px;
+            transition: border-color 0.3s;
+        }
+        textarea:focus {
+            border-color: #007BFF;
+            outline: none;
+        }
+        button {
+            width: 100%;
+            padding: 12px;
+            background: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="main-container">
+        <div class="container">
+            <!-- Left: Complaint Image with External Link -->
+            <div class="image-container">
+                <a href="https://www.example.com">
+                    <img src="https://cdn-icons-png.flaticon.com/512/1828/1828970.png" alt="Complaint Icon">
+                </a>
+            </div>
+    
+            <!-- Right: Complaint Form -->
+            <div class="form-container">
+                <h2>Send a Complaint</h2>
+                <form action="" method="post">
+                    <label for="complaint">Your Complaint:</label>
+                    <textarea id="complaint" name="complaint" required></textarea>
+    
+                    <button type="submit">Submit</button>
+                </form>
+            </div>
+        </div>
+
+        {% if complaints %}
+        <table>
+            <tr>
+                <th>Sl.No</th>
+                <th>Complaint</th>
+                <th>Reply</th>
+                <th>Date</th>
+            </tr>
+            {% for i in complaints %}
+            <tr>
+                <td>{{forloop.counter}}</td>
+                <td>{{i.complaint}}</td>
+                <td>{{i.reply}}</td>
+                <td>{{i.date}}</td>
+            </tr>
+            {% endfor %}
+        </table>
+        {% else %}
+        <h1>No complaints send yet!</h1>
+        {% endif %}
+    </div>
+
+{% include 'footer.html' %}
