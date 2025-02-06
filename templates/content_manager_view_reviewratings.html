@@ -1,81 +1,37 @@
-<!-- {% include 'content_manager_header.html' %}
-
-<h1>welcome film maker</h1>
-
-<table border="1">
-    <tr>
-        <th>Sl.No</th>
-        <th>Date</th>
-        <th>Details</th>
-        <th>Film Name</th>
-        <th>Photo</th>
-        <th>Filmmaker Name</th>
-        <th>Email</th>
-        <th>Phone</th>
-        <th>Profile Image</th>
-        <th>Bio</th>
-        <th>Action</th>
-    </tr>
-    {% for i in films %}
-    <tr>
-        <td>{{ forloop.counter }}</td>
-        <td>{{ i.date }}</td>
-        <td>{{ i.deatils }}</td>
-        <td>{{ i.film_name }}</td>
-        <td><img src="{{ i.photo.url }}" alt="Film Photo" width="100"></td>
-        <td>{{ i.filmmaker.name }}</td>
-        <td>{{ i.filmmaker.email }}</td>
-        <td>{{ i.filmmaker.phone }}</td>
-        <td><img src="{{ i.filmmaker.profile_image }}" alt="Profile Image" width="100"></td>
-        <td>{{ i.filmmaker.bio }}</td>
-        <td><a href="/content_manager_manage_campaigns/{{ i.filmid}}/{{ i.filmmaker_id}}">Add campaigns</a></td>
-        <td><a href="/content_manager_view_review&ratings/{{ i.filmid }}">View Movies ratings and reviews</a></td>
-    </tr>
-    {% endfor %}
-</table>
-
-
-{% include 'footer.html' %} -->
 
 {% include 'content_manager_header.html' %}
+<br><br><br><br>
 
-<table border="1">
-    <tr>
-        <th>Sl.No</th>
-        <th>Date</th>
-        <th>Details</th>
-        <th>Film Name</th>
-        <th>Photo</th>
-        <th>Filmmaker Name</th>
-        <th>Email</th>
-        <th>Phone</th>
-        <th>Profile Image</th>
-        <th>Bio</th>
-        <th>Action</th>
-    </tr>
-    {% for review in film_reviews %}
-    <tr>
-        <td>{{ forloop.counter }}</td>
-        <td>{{ review.rating }}</td>
-        <td>{{ review.film.details }}</td>
-        <td>{{ review.film.film_name }}</td>
-        <td>
-            <img src="{{ review.film.photo.url }}" alt="Film Image" width="50">
-        </td>
-        <td>{{ review.film.filmmaker.name }}</td>
-        <td>{{ review.film.filmmaker.email }}</td>
-        <td>{{ review.film.filmmaker.phone }}</td>
-        <td>
-            <img src="{{ review.film.filmmaker.profile_image }}" alt="Profile Image" width="50">
-        </td>
-        <td>{{ review.film.filmmaker.bio }}</td>
-        
-    </tr>
-    {% empty %}
-    <tr>
-        <td colspan="11">No reviews found.</td>
-    </tr>
-    {% endfor %}
-</table>
+<div class="container mt-4">
+    <h1 class="text-center mb-4">Film Reviews</h1>
+    <div class="row">
+        {% for review in film_reviews %}
+        <div class="col-md-4 mb-4">
+            <div class="card shadow-sm">
+                <img src="{{ review.film.photo }}" class="card-img-top" alt="Film Image">
+                <div class="card-body">
+                    <h5 class="card-title">{{ review.film.film_name }}</h5>
+                    <p class="card-text"><strong>Rating:</strong> {{ review.rating }}</p>
+                    <p class="card-text"><strong>Review:</strong> {{ review.review_text }}</p>
+                    <hr>
+                    <div class="d-flex align-items-center">
+                        <img src="{{ review.film.filmmaker.profile_image }}" alt="Profile Image" class="rounded-circle me-2" width="50" height="50">
+                        <div>
+                            <h6 class="mb-0">{{ review.film.filmmaker.name }}</h6>
+                            <small>{{ review.film.filmmaker.email }}</small>
+                        </div>
+                    </div>
+                    <p class="mt-2"><strong>Phone:</strong> {{ review.film.filmmaker.phone }}</p>
+                    <p class="card-text">{{ review.film.filmmaker.bio }}</p>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12 text-center">
+            <p>No reviews found.</p>
+        </div>
+        {% endfor %}
+    </div>
+</div>
 
 {% include 'footer.html' %} 

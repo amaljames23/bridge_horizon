@@ -1,38 +1,46 @@
 {% include 'content_manager_header.html' %}
+<br><br><br><br><br>
 
-<h1>welcome film maker</h1>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Welcome Filmmaker</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container mt-4">
+        <h1 class="text-center mb-4">Welcome Filmmaker</h1>
+        <div class="row">
+            {% for i in films %}
+            <div class="col-md-4 mb-4">
+                <div class="card shadow-sm">
+                    <img src="{{ i.photo.url }}" class="card-img-top" alt="Film Photo">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ i.film_name }}</h5>
+                        <p class="card-text"><strong>Date:</strong> {{ i.date }}</p>
+                        <p class="card-text"><strong>Details:</strong> {{ i.deatils }}</p>
+                        <hr>
+                        <div class="d-flex align-items-center">
+                            <img src="{{ i.filmmaker.profile_image }}" alt="Profile Image" class="rounded-circle me-2" width="50" height="50">
+                            <div>
+                                <h6 class="mb-0">{{ i.filmmaker.name }}</h6>
+                                <small>{{ i.filmmaker.email }}</small>
+                            </div>
+                        </div>
+                        <p class="mt-2"><strong>Phone:</strong> {{ i.filmmaker.phone }}</p>
+                        <p class="card-text">{{ i.filmmaker.bio }}</p>
+                        <a href="/content_manager_manage_campaigns/{{ i.filmid}}/{{ i.filmmaker_id}}" class="btn btn-primary btn-sm">Add Campaigns</a>
+                        <a href="/content_manager_view_review&ratings/{{ i.filmid }}" class="btn btn-secondary btn-sm">View Ratings & Reviews</a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
 
-<table border="1">
-    <tr>
-        <th>Sl.No</th>
-        <th>Date</th>
-        <th>Details</th>
-        <th>Film Name</th>
-        <th>Photo</th>
-        <th>Filmmaker Name</th>
-        <th>Email</th>
-        <th>Phone</th>
-        <th>Profile Image</th>
-        <th>Bio</th>
-        <th>Action</th>
-    </tr>
-    {% for i in films %}
-    <tr>
-        <td>{{ forloop.counter }}</td>
-        <td>{{ i.date }}</td>
-        <td>{{ i.deatils }}</td>
-        <td>{{ i.film_name }}</td>
-        <td><img src="{{ i.photo.url }}" alt="Film Photo" width="100"></td>
-        <td>{{ i.filmmaker.name }}</td>
-        <td>{{ i.filmmaker.email }}</td>
-        <td>{{ i.filmmaker.phone }}</td>
-        <td><img src="{{ i.filmmaker.profile_image }}" alt="Profile Image" width="100"></td>
-        <td>{{ i.filmmaker.bio }}</td>
-        <td><a href="/content_manager_manage_campaigns/{{ i.filmid}}/{{ i.filmmaker_id}}">Add campaigns</a></td>
-        <td><a href="/content_manager_view_review&ratings/{{ i.filmid }}">View Movies ratings and reviews</a></td>
-    </tr>
-    {% endfor %}
-</table>
+    <br><br><br><br>
 
 
 {% include 'footer.html' %}
