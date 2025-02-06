@@ -1,43 +1,57 @@
 {% include 'user_header.html' %}
+<br><br><br><br>
 
-<h1>Theaters</h1>
-<table>
-    <tr>
-        <th>Sl.No</th>
-        <th>Name</th>
-        <th>Location</th>
-        <th>Capacity</th>
-        <th>Contact Email</th>
-        <th>Contact Phone</th>
-        <th>Start Time</th>
-        <th>End Time</th>
-        <th>Date</th>
-        <th>Status</th>
-        <th>Action</th>
-    </tr>
-    
-    {% for theater in theaters %}
-        {% for slot in screening_slots %}
-            {% if slot.theater == theater %}
-            <tr>
-                <td>{{ forloop.parentloop.counter }}</td>
-                <td>{{ theater.name }}</td>
-                <td>{{ theater.location }}</td>
-                <td>{{ theater.capacity }}</td>
-                <td>{{ theater.contact_email }}</td>
-                <td>{{ theater.contact_phone }}</td>
-                <td>{{ slot.start_time }}</td>
-                <td>{{ slot.end_time }}</td>
-                <td>{{ slot.date }}</td>
-                <td>{{ slot.status }}</td>
-                <td><a href="user_book_seats/{{ theater.theater_id }}/{{ slot.slot_id }}">Book Seats</a></td>
-                <td><a href="use_add_rating/{{ slot.film_id }}">add rating</a></td>
-            </tr>
-            {% endif %}
+<style>
+    body {
+        background-color: #f8f9fa;
+    }
+    .card {
+        border: none;
+        border-radius: 10px;
+        transition: transform 0.3s;
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    }
+    .card:hover {
+        transform: scale(1.05);
+    }
+    .card-body {
+        background: #ffffff;
+        border-radius: 10px;
+        padding: 20px;
+    }
+    .theater-card {
+        margin-bottom: 20px;
+    }
+</style>
+
+<div class="container mt-4">
+    <h1 class="text-center mb-4">Theaters</h1>
+    <div class="row">
+        {% for theater in theaters %}
+            {% for slot in screening_slots %}
+                {% if slot.theater == theater %}
+                <div class="col-md-4">
+                    <div class="card theater-card">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ theater.name }}</h5>
+                            <p class="card-text"><strong>Location:</strong> {{ theater.location }}</p>
+                            <p class="card-text"><strong>Capacity:</strong> {{ theater.capacity }}</p>
+                            <p class="card-text"><strong>Email:</strong> {{ theater.contact_email }}</p>
+                            <p class="card-text"><strong>Phone:</strong> {{ theater.contact_phone }}</p>
+                            <p class="card-text"><strong>Start Time:</strong> {{ slot.start_time }}</p>
+                            <p class="card-text"><strong>End Time:</strong> {{ slot.end_time }}</p>
+                            <p class="card-text"><strong>Date:</strong> {{ slot.date }}</p>
+                            <p class="card-text"><strong>Status:</strong> {{ slot.status }}</p>
+                            <a href="user_book_seats/{{ theater.theater_id }}/{{ slot.slot_id }}" class="btn btn-primary">Book Seats</a>
+                            <a href="use_add_rating/{{ slot.film_id }}" class="btn btn-secondary">Add Rating</a>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+            {% endfor %}
         {% endfor %}
-    {% endfor %}
-</table>
-
+    </div>
+</div>
 
 
 {% include 'footer.html' %}

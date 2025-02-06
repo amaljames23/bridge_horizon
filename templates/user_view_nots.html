@@ -1,21 +1,55 @@
 {% include 'user_header.html' %}
+<br><br><br><br><br><br>
+<center>
+
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .notification-card {
+            background: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin-bottom: 20px;
+            border-left: 5px solid #17a2b8;
+            transition: transform 0.3s;
+        }
+        .notification-card:hover {
+            transform: scale(1.05);
+        }
+        .notification-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #17a2b8;
+        }
+        .notification-detail {
+            font-size: 1rem;
+            margin-bottom: 5px;
+        }
+    </style>
 
 <h1>Notifications</h1>
-<table>
-    <tr>
-        <th>Sl.No</th>
-        <th>Title</th>
-        <th>Notification</th>
-        <th>Date</th>
-    </tr>
-    {% for i in nots %}
-    <tr>
-        <td>{{forloop.counter}}</td>
-        <td>{{i.title}}</td>
-        <td>{{i.notification}}</td>
-        <td>{{i.date}}</td>
-    </tr>
-    {% endfor %}
-</table>
+<div class="container mt-4">
+    <h1 class="text-center mb-4">Notifications</h1>
+    <div class="row">
+        {% for i in nots %}
+        <div class="col-md-4">
+            <div class="notification-card">
+                <div class="notification-title">{{ i.title }}</div>
+                <p class="notification-detail">{{ i.notification }}</p>
+                <p class="notification-detail"><strong>Date:</strong> {{ i.date }}</p>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12 text-center">
+            <p>No notifications found.</p>
+        </div>
+        {% endfor %}
+    </div>
+</div>
 
+
+</center>
+<br><br><br><br>
 {% include 'footer.html' %}
