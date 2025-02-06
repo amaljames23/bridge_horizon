@@ -23,6 +23,9 @@ def login_form(request):
             if lg.usertype=='admin':
                 return HttpResponse("<script>alert('Login Successfully');window.location='/adminhome';</script>")
             if lg.usertype=='owner':
+                th=TheaterOwner.objects.get(login_id=lg.pk)
+                if th:
+                    request.session['owner_id']=th.pk
                 return HttpResponse("<script>alert('Login Successfully');window.location='/theatre_home';</script>")
             if lg.usertype=='user':
                 return HttpResponse("<script>alert('Login Successfully');window.location='/user_home';</script>")
