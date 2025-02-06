@@ -22,7 +22,7 @@ class TheaterOwner(models.Model):
     name = models.CharField(max_length=255)
     email = models.EmailField(unique=True)
     phone = models.CharField(max_length=20)
-    profile_image = models.ImageField(upload_to='profile_images/')
+    license_photo=models.FileField()
     login = models.ForeignKey('Login', on_delete=models.CASCADE)
 
 class Theater(models.Model):

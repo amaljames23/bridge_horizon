@@ -78,10 +78,21 @@ def admin_manage_users(request):
 
     return render(request,'admin_manage_users.html',{'usr':usr})
 
-def delete_user(request,aid):
-    aud=Audience.objects.get(audience_id=aid)
-    aud.delete()
-    return HttpResponse("<script>alert(' Deleted Successfully');window.location='/admin_manage_users';</script>")
+
+
+def accept_user(request,aid):
+    aud=Login.objects.get(login_id=aid)
+    aud.usertype='user'
+    aud.save()
+    return HttpResponse("<script>alert('Accept Successfully');window.location='/admin_manage_users';</script>")
+
+
+
+def reject_user(request,aid):
+    aud=Login.objects.get(login_id=aid)
+    aud.usertype='pending'
+    aud.save()
+    return HttpResponse("<script>alert('Reject Successfully');window.location='/admin_manage_users';</script>")
 
 def admin_view_compalints(request):
     comp=complaint.objects.all()
@@ -163,4 +174,59 @@ def admin_view_Review(request):
 
 def admin_send_notification(request):
 
+    if request.method=='POST':
+        title=request.POST['title']
+        notifications=request.POST['noti']
+        from django.utils import timezone
+        current_date = timezone.now().date()
+        print(current_date)  # Output: YYYY-MM-DD
+
+
+        noti=notification(title=title,notifications=notifications,date=current_date)
+        noti.save()
+        return HttpResponse("<script>alert('Notification Send Successfully');window.location='/admin_send_notification';</script>")
     return render(request,'admin_send_notification.html')
+
+
+def admin_view_producers(request):
+    pro=Filmmaker.objects.all()
+    return render(request,'admin_view_producers.html',{'pro':pro})
+
+def admin_view_theaters(request):
+    th=TheaterOwner.objects.all()
+    return render(request,'admin_view_theaters.html',{'th':th})
+
+
+def accept_theaterowner(request,lid):
+    aud=Login.objects.get(login_id=lid)
+    aud.usertype='owner'
+    aud.save()
+    return HttpResponse("<script>alert('Accept Successfully');window.location='/admin_view_theaters';</script>")
+
+
+
+def reject_theaterowner(request,lid):
+    aud=Login.objects.get(login_id=lid)
+    aud.usertype='pending'
+    aud.save()
+    return HttpResponse("<script>alert('Reject Successfully');window.location='/admin_view_theaters';</script>")
+
+
+
+def admin_view_ContentManager(request):
+    cm=ContentManager.objects.all()
+    return render(request,'admin_view_content_manager.html',{'cm':cm})
+
+
+def accept_content_manager(request,lid):
+    aud=Login.objects.get(login_id=lid)
+    aud.usertype='contentmanager'
+    aud.save()
+    return HttpResponse("<script>alert('Accept Successfully');window.location='/admin_view_ContentManager';</script>")
+
+
+def reject_content_manager(request,lid):
+    aud=Login.objects.get(login_id=lid)
+    aud.usertype='pending'
+    aud.save()
+    return HttpResponse("<script>alert('Reject Successfully');window.location='/admin_view_ContentManager';</script>")

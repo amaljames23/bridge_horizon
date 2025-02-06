@@ -1,0 +1,50 @@
+
+
+{%include 'thearte_header.html'%}
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+
+    
+
+    <form action="" method="post">
+        <table>
+            <tr>
+                <th>Seat Number</th>
+                <td><input type="text" name="snum" ></td>
+            </tr>
+            <tr>
+                <th>Seat Type</th>
+                <td><input type="text" name="stype" ></td>
+            </tr>
+            <tr>
+                <th><input type="submit" name="add"></th>
+            </tr>
+        </table>
+    </form>
+
+    <table border="2">
+        <tr>
+            <th>SL.NO</th>
+            <th>Seat Number</th>
+            <th>Seat Type</th>
+
+        </tr>
+        {% for seat in st %}
+        <tr>
+            <td>{{forloop.counter}}</td>
+            <td>{{seat.seat_number}}</td>
+            <td>{{seat.seat_type}}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    
+</body>
+</html>
+
+{%include 'footer.html'%}
