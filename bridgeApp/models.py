@@ -74,9 +74,9 @@ class Review(models.Model):
     review_id = models.AutoField(primary_key=True)
     audience = models.ForeignKey('Audience', on_delete=models.CASCADE)
     film = models.ForeignKey('Film', on_delete=models.CASCADE)
-    rating = models.IntegerField()
-    review_text = models.TextField()
-    review_date = models.DateTimeField()
+    rating = models.CharField(max_length=255)
+    review_text = models.CharField(max_length=255)
+    review_date = models.CharField(max_length=255)
 
 class SeatBooking(models.Model):
     booking_id = models.AutoField(primary_key=True)

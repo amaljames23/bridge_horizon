@@ -1,0 +1,31 @@
+{% include 'user_header.html' %}
+
+<table border="1">
+    <tr>
+        <th>Film Name</th>
+        <th>Theater</th>
+        <th>Slot Date</th>
+        <th>Start Time</th>
+        <th>End Time</th>
+        <th>Seat</th>
+        <th>Payment Status</th>
+    </tr>
+    {% for booking in booked_tickets %}
+    <tr>
+        <td>{{ booking.slot.film.film_name }}</td>
+        <td>{{ booking.slot.theater.name }}</td>  <!-- Display Theater Name -->
+        <td>{{ booking.slot.date }}</td>
+        <td>{{ booking.slot.start_time }}</td>
+        <td>{{ booking.slot.end_time }}</td>
+        <td>{{ booking.seat.seat_number }}</td>  <!-- Display Seat Number -->
+        <td>{{ booking.payment_status }}</td>
+    </tr>
+    {% empty %}
+    <tr>
+        <td colspan="7">No booked tickets found.</td>
+    </tr>
+    {% endfor %}
+</table>
+
+
+{% include 'footer.html' %}

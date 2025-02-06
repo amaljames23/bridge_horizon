@@ -139,6 +139,56 @@ def user_seat_confirm(request):
     return JsonResponse({"success": False, "error": "Invalid request"})
 
 
+from django.shortcuts import render
+from django.http import HttpResponse
+# from .models import Film, Review, Audience, Rating
+from django.utils.timezone import now
+
+def use_add_rating(request, film_id):
+    if request.method == 'POST':
+        rating = request.POST['rating']
+        review_text = request.POST['review']
+        login_id = request.session['login_id']
+        
+        # Fetch film and audience details
+        film_res = film.objects.get(pk=film_id)
+        audience = Audience.objects.get(pk=login_id)  # Assuming login_id corresponds to an Audience
+        
+        # Save the rating
+        # Review.objects.create(rating=rating, film=film_res, audience=audience)  # Assuming Login and Audience are related
+        
+        # Save the review
+        Review.objects.create(
+            audience=audience,
+            film=film_res,
+            rating=rating,
+            review_text=review_text,
+            review_date=now()
+        )
+        
+        return HttpResponse("<script>alert('Rating & Review Added Successfully');window.location='/user_home';</script>")
+
+    return render(request, 'use_add_rating.html')
+
+# from django.shortcuts import render
+# from .models import SeatBooking
+
+def user_view_booked_tickets(request):
+    login_id = request.session.get('login_id')  # Assuming the logged-in user ID is stored in the session
+
+    audience_res = Audience.objects.get(login_id=login_id)
+
+    # Fetch booked tickets for the logged-in audience
+    booked_tickets = SeatBooking.objects.filter(audience=audience_res).select_related('slot__film', 'slot__theater', 'seat')
+
+    context = {
+        'booked_tickets': booked_tickets
+    }
+
+    return render(request, 'user_view_booked_tickets.html', context)
+
+
+
 #######################################film maker
 from django.core.files.storage import FileSystemStorage
 
@@ -323,6 +373,98 @@ def film_update_profile(request,id):
 
     return render(request,"film_update_profile.html",{'a':a})
 
+# from django.shortcuts import render
+# from .models import Chat, TheaterOwner, Login
+
+def film_maker_view_mssges(request):
+    # Get all chat messages
+    chats = chat.objects.all()
+
+    # Extract unique login_ids from 'fromid' and 'toid' fields
+    theater_owner_login_ids = set(chats.values_list('fromid', flat=True)) | set(chats.values_list('toid', flat=True))
+
+    # Fetch TheaterOwner details where login_id matches 'fromid' or 'toid'
+    theater_owners = TheaterOwner.objects.filter(login__login_id__in=theater_owner_login_ids).values(
+        'owner_id', 'name', 'email', 'phone', 'profile_image', 'login__login_id'
+    )
+
+    return render(request, 'film_maker_view_mssges.html', {'theater_owners': theater_owners})
+
+
+# from django.shortcuts import render, redirect
+# # from .models import Chat, Login, TheaterOwner
+# from django.db.models import Q
+# from django.utils.timezone import now
+
+# def film_maker_chat_owners(request, login_id):
+#     sender_id = request.session.get('login_id')  # Filmmaker's login ID
+#     receiver_id = login_id  # Theater owner's login ID
+    
+#     # Fetch chat messages (both sent & received)
+#     messages = chat.objects.filter(
+#         (Q(fromid=sender_id, toid=receiver_id) | Q(fromid=receiver_id, toid=sender_id))
+#     ).order_by('chatid')
+
+#     # Handle message sending
+#     if request.method == "POST":
+#         message_text = request.POST.get('message')
+#         if message_text:
+#             chat.objects.create(fromid=sender_id, toid=receiver_id, date=now(), message=message_text)
+#             return redirect('film_maker_chat_owners', login_id=receiver_id)  # Refresh the page
+
+#     # Fetch theater owner details
+#     theater_owner = TheaterOwner.objects.get(login__login_id=receiver_id)
+
+#     return render(request, 'film_maker_chat_owners.html', {
+#         'messages': messages,
+#         'theater_owner': theater_owner,
+#         'sender_id': sender_id
+#     })
+
+from django.shortcuts import render, redirect
+from django.db.models import Q
+from django.utils.timezone import now
+# from .models import Chat, TheaterOwner
+
+def film_maker_chat_owners(request, login_id):
+    sender_id = request.session.get('login_id')  # Filmmaker's login ID
+    receiver_id = login_id  # Theater owner's login ID
+    
+    # Fetch chat messages (both sent & received)
+    messages = chat.objects.filter(
+        Q(fromid=sender_id, toid=receiver_id) | Q(fromid=receiver_id, toid=sender_id)
+    ).order_by('date')  # Order messages by date (ensure it's the correct field for ordering)
+
+    # Handle message sending
+    if request.method == "POST":
+        message_text = request.POST.get('message')
+        if message_text:
+            chat.objects.create(fromid=sender_id, toid=receiver_id, date=now(), message=message_text)
+            return redirect('film_maker_chat_owners', login_id=receiver_id)  # Refresh the page
+
+    # Fetch theater owner details
+    theater_owner = TheaterOwner.objects.get(login__login_id=receiver_id)
+
+    return render(request, 'film_maker_chat_owners.html', {
+        'messages': messages,
+        'theater_owner': theater_owner,
+        'sender_id': sender_id
+    })
+
+
+def film_maker_view_tickets(request):
+    login_id = request.session.get('login_id')  # Assuming the logged-in user ID is stored in the session
+
+    audience_res = Filmmaker.objects.get(login_id=login_id)
+
+    # Fetch booked tickets for the logged-in audience
+    booked_tickets = SeatBooking.objects.filter(filmmaker=audience_res).select_related('slot__film', 'slot__theater', 'seat')
+
+    context = {
+        'booked_tickets': booked_tickets
+    }
+
+    return render(request, 'film_maker_view_tickets.html', context)
 
 
 ###########################content manager############################3
@@ -436,6 +578,11 @@ def update_campaign(request,cam_id):
     return render(request,"update_campaign.html",{ "camp_films_data":campaign_data})
 
 
-def content_manager_view_reviewratings(request,filmid):
-    
-    return render(request,"content_manager_view_reviewratings.html")
+from django.shortcuts import render
+# from .models import Review, Film, Filmmaker
+
+def content_manager_view_reviewratings(request, filmid):
+    film_reviews = Review.objects.filter(film_id=filmid).select_related('film', 'audience')
+
+    context = {'film_reviews': film_reviews}
+    return render(request, "content_manager_view_reviewratings.html", context)

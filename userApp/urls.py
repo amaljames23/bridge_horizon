@@ -9,6 +9,8 @@ urlpatterns = [
     path('user_view_theaters',views.user_view_theaters,name='user_view_theaters'),
     path('user_book_seats/<theater_id>/<screening_slot_id>',views.user_book_seats,name='user_book_seats'),
     path('user_seat_confirm/', views.user_seat_confirm, name='user_seat_confirm'),
+    path('use_add_rating/<film_id>', views.use_add_rating, name='use_add_rating'),
+    path('user_view_booked_tickets', views.user_view_booked_tickets, name='user_view_booked_tickets'),
     ################film maker################
     path('filmaker_reg/', views.filmaker_reg, name='filmaker_reg'),
     path('filmaker_home/', views.filmaker_home, name='filmaker_home'),
@@ -19,6 +21,9 @@ urlpatterns = [
     path('film_maker_view_campaigns/', views.film_maker_view_campaigns, name='film_maker_view_campaigns'),
     path('film_maker_view_campaigns_basedon_films/<film_id>', views.film_maker_view_campaigns_basedon_films, name='film_maker_view_campaigns_basedon_films'),
     path('film_update_profile/<id>', views.film_update_profile, name='film_update_profile'),
+    path('film_maker_view_mssges', views.film_maker_view_mssges, name='film_maker_view_mssges'),
+    path('film_maker_chat_owners/<login_id>', views.film_maker_chat_owners, name='film_maker_chat_owners'),
+    path('film_maker_view_tickets', views.film_maker_view_tickets, name='film_maker_view_tickets'),
 
     #####################content manager#####################
     path('content_manager_reg', views.content_manager_reg, name='content_manager_reg'),
