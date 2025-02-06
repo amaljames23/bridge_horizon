@@ -1,30 +1,46 @@
 {%include 'admin_header.html'%}
 
-<table border="2">
+<style>
+    body {
+        background-color: #f8f9fa;
+    }
+    .card-container {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 20px;
+        padding: 20px;
+    }
+    .card {
+        width: 20rem;
+    }
+    .card img {
+        height: 250px;
+        object-fit: cover;
+    }
+</style>
 
-    <tr>
-        <th>Sl.No</th>
-        <th>Name</th>
-        <th>Email</th>
-        <th>Phone</th>
-        <th>Llicense</th>
-    </tr>
+<br><br><br><br><br>
 
-    {% for i in th %}
-
-    <tr>
-        <td>{{forloop.counter}}</td>
-        <td>{{i.name}}</td>
-        <td>{{i.email}}</td>
-        <td>{{i.phone}}</td>
-        <td><img src="/static/image/{{i.license_photo}}" alt="images" height="250px" width="250px"></td>
-        <td><a href="/accept_theaterowner/{{i.login_id}}">Accept</a></td>
-        <td><a href="/reject_theaterowner/{{i.login_id}}">Reject</a></td>
-    </tr>
-
-    {%endfor%}
-
-</table>
+<div class="container">
+    <h2 class="text-center my-4">Theater Owners</h2>
+    <div class="card-container">
+        {% for i in th %}
+        <div class="card shadow-sm">
+            <img src="/static/image/{{ i.license_photo }}" class="card-img-top" alt="License Image">
+            <div class="card-body">
+                <h5 class="card-title">{{ i.name }}</h5>
+                <p class="card-text"><strong>Email:</strong> {{ i.email }}</p>
+                <p class="card-text"><strong>Phone:</strong> {{ i.phone }}</p>
+                <div class="d-flex justify-content-between">
+                    <a href="/accept_theaterowner/{{ i.login_id }}" class="btn btn-success">Accept</a>
+                    <a href="/reject_theaterowner/{{ i.login_id }}" class="btn btn-danger">Reject</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
 
 
 {%include 'footer.html'%}

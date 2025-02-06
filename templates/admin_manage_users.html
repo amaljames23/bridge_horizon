@@ -1,81 +1,29 @@
 
 
 {%include 'admin_header.html'%}
+<br><br><br><br><br><br>
 
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    
-
-    <!-- <form action="" method="post">
-
-        <table>
-            <tr>
-                <th>Name</th>
-                <td><input type="text" name="name"></td>
-            </tr>
-
-            <tr>
-                <th>Email</th>
-                <td><input type="email" name="mail" ></td>
-            </tr>
-
-            <tr>
-                <th>Phone</th>
-                <td><input type="text" name="phone"></td>
-            </tr>
-
-            <tr>
-                <th>Preferences</th>
-                <td><input type="text" name="per"></td>
-            </tr>
-
-            <tr>
-                <th>User Name</th>
-                <td><input type="text" name="uname" ></td>
-            </tr>
-
-            <tr>
-                <th>Password</th>
-                <td><input type="password" name="pass" ></td>
-            </tr>
-
-            <tr>
-                <td><input type="submit" name="add" ></td>
-            </tr>
-        </table>
-
-    </form> -->
-
-    <table border="2">
-
-        <tr>
-            <th>Sl.No</th>
-            <th>Name</th>
-            <th>Email</th>
-            <th>Phone</th>
-            <th>Preferences</th>
-        </tr>
-
+<div class="container mt-4">
+    <h2 class="text-center mb-4">User Management</h2>
+    <div class="row">
         {% for i in usr %}
+        <div class="col-md-4">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">{{ i.name }}</h5>
+                    <p class="card-text"><strong>Email:</strong> {{ i.email }}</p>
+                    <p class="card-text"><strong>Phone:</strong> {{ i.phone }}</p>
+                    <p class="card-text"><strong>Preferences:</strong> {{ i.preferences }}</p>
+                    <div class="d-flex justify-content-between">
+                        <a href="/accept_user/{{i.login_id}}" class="btn btn-success">Accept</a>
+                        <a href="/reject_user/{{i.login_id}}" class="btn btn-danger">Reject</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
 
-        <tr>
-            <td>{{ forloop.counter}}</td>
-            <td>{{i.name}}</td>
-            <td>{{i.email}}</td>
-            <td>{{i.phone}}</td>
-            <td>{{i.preferences}}</td>
-            <td><a href="/accept_user/{{i.login_id}}">Accept</a></td>
-            <td><a href="/reject_user/{{i.login_id}}">Reject</a></td>
-        </tr>
-
-        {%endfor%}
-    </table>
-</body>
-</html>
 
 {%include 'footer.html'%}

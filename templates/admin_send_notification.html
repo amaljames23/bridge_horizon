@@ -1,33 +1,40 @@
 
 {%include 'admin_header.html'%}
+<br><br><br><br><br>
 
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
+<style>
+    body {
+        background-color: #f8f9fa;
+    }
+    .form-container {
+        max-width: 500px;
+        margin: 50px auto;
+        padding: 20px;
+        background: white;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+</style>
     
-    <form action="" method="post">
-        <table>
-            <tr>
-                <th>Title</th>
-                <td><input type="text" name="title" ></td>
-            </tr>
+    <div class="container">
+        <div class="form-container">
+            <h2 class="text-center">Send Notification</h2>
+            <form action="" method="post">
+                <div class="mb-3">
+                    <label for="title" class="form-label">Title</label>
+                    <input type="text" class="form-control" id="title" name="title" required>
+                </div>
+                <div class="mb-3">
+                    <label for="noti" class="form-label">Notification</label>
+                    <input type="text" class="form-control" id="noti" name="noti" required>
+                </div>
+                <div class="text-center">
+                    <button type="submit" class="btn btn-primary" name="send">Send</button>
+                </div>
+            </form>
+        </div>
+    </div>
 
-            <tr>
-                <th>Notification</th>
-                <td><input type="text" name="noti" ></td>
-            </tr>
 
-            <tr>
-                <th><input type="submit" name="send" ></th>
-            </tr>
-        </table>
-    </form>
-
-</body>
-</html>
 
 {%include 'footer.html'%}

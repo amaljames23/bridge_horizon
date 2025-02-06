@@ -1,38 +1,31 @@
 
 {%include 'admin_header.html'%}
 
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    <table border="2">
+<style>
+    .card {
+            margin-bottom: 20px;
+        }
+</style>
 
-        <tr>
-            <th>Sl.No</th>
-            <th>Fim Name</th>
-            <th>Review</th>
-            <th>Rating</th>
-            <th>Date</th>
-        </tr>
 
-        {%for i in revv%}
+<div class="container mt-5">
+    <h2 class="text-center mb-4">Film Reviews</h2>
+    <div class="row">
+        {% for i in revv %}
+        <div class="col-md-6 col-lg-4">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">{{ i.film.film_name }}</h5>
+                    <p class="card-text"><strong>Review:</strong> {{ i.review_text }}</p>
+                    <p class="card-text"><strong>Rating:</strong> {{ i.rating }} / 5</p>
+                    <p class="card-text"><small class="text-muted">Reviewed on {{ i.review_date }}</small></p>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
 
-        <tr>
-            <td>{{forloop.counter}}</td>
-            <th>{{i.film.film_name}}</th>
-            <td>{{i.review_text}}</td>
-            <td>{{i.rating}}</td>
-            <td>{{i.review_date}}</td>
-        </tr>
 
-        {%endfor%}
-
-    </table>
-
-</body>
-</html>
 
 {%include 'footer.html'%}

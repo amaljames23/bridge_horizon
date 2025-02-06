@@ -1,37 +1,41 @@
 
 {%include 'admin_header.html'%}
 
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
+<style>
+    body {
+        background-color: #f8f9fa;
+    }
+    .card-container {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 20px;
+        padding: 20px;
+    }
+    .card {
+        width: 18rem;
+    }
+</style>
+
+<br><br><br><br>
+
+
     
-    <table border="2">
-
-        <tr>
-            <th>Sl.No</th>
-            <th>Name</th>
-            <th>Email</th>
-            <th>Phone</th>
-            <th>Place</th>
-        </tr>
-
+<div class="container">
+    <h2 class="text-center my-4">Profiles</h2>
+    <div class="card-container">
         {% for i in pro %}
-
-        <tr>
-            <td>{{forloop.counter}}</td>
-            <td>{{i.name}}</td>
-            <td>{{i.email}}</td>
-            <td>{{i.phone}}</td>
-            <td>{{i.bio}}</td>
-        </tr>
-
-        {%endfor%}
-
-    </table>
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <h5 class="card-title">{{ i.name }}</h5>
+                <p class="card-text"><strong>Email:</strong> {{ i.email }}</p>
+                <p class="card-text"><strong>Phone:</strong> {{ i.phone }}</p>
+                <p class="card-text"><strong>Place:</strong> {{ i.bio }}</p>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
 
 </body>
 </html>

@@ -1,94 +1,123 @@
+{%include 'admin_header.html'%} <br /><br /><br /><br /><br /><br />
+<style>
+  .form-container {
+    max-width: 600px;
+    margin: auto;
+    background: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+  .card img {
+    height: 250px;
+    object-fit: cover;
+  }
+</style>
 
-{%include 'admin_header.html'%}
+{% if fimupd %}
 
-    {% if fimupd %}
-
+<div class="container mt-5">
+  <div class="form-container">
+    <h2 class="text-center mb-4">Update Film Details</h2>
     <form method="POST" enctype="multipart/form-data">
-        <table>
-            <tr>
-                <th>Film Name</th>
-                <td><input type="text" name="film" value="{{fimupd.film_name}}" ></td>
-            </tr>
-
-            <tr>
-                <th>Details</th>
-                <td><input type="text" name="deat" value="{{fimupd.deatils}}"></td>
-            </tr>
-
-            <tr>
-                <th>Image</th>
-                <td><input type="file" name="photo" required ></td>
-            </tr>
-
-            <tr>
-                <th>Release Date</th>
-                <td><input type="text" name="redate" value="{{fimupd.date}}"></td>
-            </tr>
-
-            <tr>
-                <td><input type="submit" name="add"></td>
-            </tr>
-        </table>
+      <div class="mb-3">
+        <label class="form-label">Film Name</label>
+        <input
+          type="text"
+          name="film"
+          class="form-control"
+          value="{{ fimupd.film_name }}"
+          required
+        />
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Details</label>
+        <input
+          type="text"
+          name="deat"
+          class="form-control"
+          value="{{ fimupd.deatils }}"
+          required
+        />
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Image</label>
+        <input type="file" name="photo" class="form-control" required />
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Release Date</label>
+        <input
+          type="text"
+          name="redate"
+          class="form-control"
+          value="{{ fimupd.date }}"
+          required
+        />
+      </div>
+      <div class="text-center">
+        <button type="submit" class="btn btn-primary">Update Film</button>
+      </div>
     </form>
-
+  </div>
+</div>
 
 {%else%}
 
-    
-
+<div class="container mt-5">
+  <div class="form-container">
+    <h2 class="text-center mb-4">Add New Film</h2>
     <form method="POST" enctype="multipart/form-data">
-        <table>
-            <tr>
-                <th>Film Name</th>
-                <td><input type="text" name="film" ></td>
-            </tr>
-
-            <tr>
-                <th>Details</th>
-                <td><input type="text" name="deat"></td>
-            </tr>
-
-            <tr>
-                <th>Image</th>
-                <td><input type="file" name="photo" required></td>
-            </tr>
-
-            <tr>
-                <th>Release Date</th>
-                <td><input type="text" name="redate"></td>
-            </tr>
-
-            <tr>
-                <td><input type="submit" name="add"></td>
-            </tr>
-        </table>
+      <div class="mb-3">
+        <label class="form-label">Film Name</label>
+        <input type="text" name="film" class="form-control" required />
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Details</label>
+        <input type="text" name="deat" class="form-control" required />
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Image</label>
+        <input type="file" name="photo" class="form-control" required />
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Release Date</label>
+        <input type="text" name="redate" class="form-control" required />
+      </div>
+      <div class="text-center">
+        <button type="submit" class="btn btn-primary">Add Film</button>
+      </div>
     </form>
+  </div>
+</div>
 
-
-    <table border="2">
-
-        <tr>
-            <th>Sl.No</th>
-            <th>Film Name</th>
-            <th>Details</th>
-            <th>Images</th>
-            <th>Release Date</th>
-        </tr>
-        {%for i in films%}
-        <tr>
-            <td>{{forloop.counter}}</td>
-            <td>{{i.film_name}}</td>
-            <td>{{i.deatils}}</td>
-            <td><img src="/static/image/{{i.photo}}" alt="image" height="250px" width="250px"></td>
-            <td>{{i.date}}</td>
-            <td><a href="/admin_update_films/{{i.filmid}}">Update</a></td>
-            <td><a href="/admin_delete_films/{{i.filmid}}">Delete</a></td>
-        </tr>
-
-        {%endfor%}
-    </table>
-    {%endif%}
-
-
-
-{%include 'footer.html'%}
+<br /><br /><br /><br />
+<div class="container mt-5">
+  <h2 class="text-center mb-4">Films List</h2>
+  <div class="row">
+    {% for i in films %}
+    <div class="col-md-4 mb-4">
+      <div class="card shadow-sm">
+        <img
+          src="/static/image/{{ i.photo }}"
+          class="card-img-top"
+          alt="Film Image"
+        />
+        <div class="card-body">
+          <h5 class="card-title">{{ i.film_name }}</h5>
+          <p class="card-text">{{ i.deatils }}</p>
+          <p class="card-text"><strong>Release Date:</strong> {{ i.date }}</p>
+          <div class="d-flex justify-content-between">
+            <a href="/admin_update_films/{{ i.filmid }}" class="btn btn-primary"
+              >Update</a
+            >
+            <a href="/admin_delete_films/{{ i.filmid }}" class="btn btn-danger"
+              >Delete</a
+            >
+          </div>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+{%endif%} {%include 'footer.html'%}

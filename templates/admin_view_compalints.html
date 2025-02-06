@@ -1,21 +1,16 @@
 
 {%include 'admin_header.html'%}
 
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
+<br><br><br><br><br><br>
     
-    <table  border="2">
+    <table class="table table-striped">
         <tr>
 
             <th>Sl.no</th>
             <th>Complaint</th>
             <th>Reply</th>
             <th>Date</th>
+            <th></th>
         </tr>
 
         {%for i in comp%}
@@ -30,8 +25,6 @@
 
         {%endfor%}
     </table>
-
-</body>
-</html>
+<br><br><br><br>
 
 {%include 'footer.html'%}
