@@ -1,42 +1,42 @@
 {% include 'filmmaker_header.html' %}
+<br><br><br><br><br>
 
-<h1>Theaters</h1>
-<table>
-    <tr>
-        <th>Sl.No</th>
-        <th>Name</th>
-        <th>Location</th>
-        <th>Capacity</th>
-        <th>Contact Email</th>
-        <th>Contact Phone</th>
-        <th>Start Time</th>
-        <th>End Time</th>
-        <th>Date</th>
-        <th>Status</th>
-        <th>Action</th>
-    </tr>
-    
-    {% for theater in theaters %}
-        {% for slot in screening_slots %}
-            {% if slot.theater == theater %}
-            <tr>
-                <td>{{ forloop.parentloop.counter }}</td>
-                <td>{{ theater.name }}</td>
-                <td>{{ theater.location }}</td>
-                <td>{{ theater.capacity }}</td>
-                <td>{{ theater.contact_email }}</td>
-                <td>{{ theater.contact_phone }}</td>
-                <td>{{ slot.start_time }}</td>
-                <td>{{ slot.end_time }}</td>
-                <td>{{ slot.date }}</td>
-                <td>{{ slot.status }}</td>
-                <td><a href="film_maker_book_seats/{{ theater.theater_id }}/{{ slot.slot_id }}">Book Seats</a></td>
-            </tr>
-            {% endif %}
+<h1 class="text-center">Theaters</h1>
+<div class="container mt-5">
+    <div class="row">
+        {% for theater in theaters %}
+            {% for slot in screening_slots %}
+                {% if slot.theater == theater %}
+                <div class="col-md-6 col-lg-4 mb-4">
+                    <div class="card shadow-lg border-0">
+                        <div class="card-body">
+                            <h5 class="card-title text-primary">{{ theater.name }}</h5>
+                            <p class="card-text">
+                                <strong>Location:</strong> {{ theater.location }} <br>
+                                <strong>Capacity:</strong> {{ theater.capacity }} <br>
+                                <strong>Email:</strong> {{ theater.contact_email }} <br>
+                                <strong>Phone:</strong> {{ theater.contact_phone }} <br>
+                                <strong>Start Time:</strong> {{ slot.start_time }} <br>
+                                <strong>End Time:</strong> {{ slot.end_time }} <br>
+                                <strong>Date:</strong> {{ slot.date }} <br>
+                                <strong>Status:</strong> 
+                                <span class="badge {% if slot.status == 'Available' %}bg-success{% else %}bg-danger{% endif %}">
+                                    {{ slot.status }}
+                                </span>
+                            </p>
+                            <a href="film_maker_book_seats/{{ theater.theater_id }}/{{ slot.slot_id }}" class="btn btn-primary w-100">
+                                Book Seats
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+            {% endfor %}
         {% endfor %}
-    {% endfor %}
-</table>
+    </div>
+</div>
 
 
 
+<br><br><br><br><br><br>
 {% include 'footer.html' %}
