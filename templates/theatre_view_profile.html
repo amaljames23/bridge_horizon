@@ -1,0 +1,62 @@
+
+
+{%include 'thearte_header.html'%}
+
+{%if thup%}
+<form action="" method="post" enctype="multipart/form-data">
+    <table>
+        <tr>
+            <th>Name</th>
+            <td><input type="text" name="name" value="{{thup.name}}"></td>
+        </tr>
+
+        <tr>
+            <th>Email</th>
+            <td><input type="email" name="mail"  value="{{thup.email}}"></td>
+        </tr>
+
+        <tr>
+            <th>Phone</th>
+            <td><input type="text" name="phone" value="{{thup.phone}}"></td>
+        </tr>
+        <tr>
+            <th>License</th>
+            <td><input type="file" name="photo" ></td>
+        </tr>
+        <tr>
+            <th><input type="submit" name="Add" ></th>
+        </tr>
+    </table>
+</form>
+
+{%else%}
+
+
+    
+<table border="2">
+
+    <tr>
+     
+        <th>Name</th>
+        <th>Email</th>
+        <th>Phone</th>
+        <th>Llicense</th>
+    </tr>
+
+
+    <tr>
+     
+        <td>{{th.name}}</td>
+        <td>{{th.email}}</td>
+        <td>{{th.phone}}</td>
+        <td><img src="/static/image/{{th.license_photo}}" alt="images" height="250px" width="250px"></td>
+        <td><a href="/thearter_owner_update_profile/{{th.login_id}}">Update Profile</a></td>
+    </tr>
+
+
+</table>
+
+{%endif%}
+    
+
+{%include 'footer.html'%}

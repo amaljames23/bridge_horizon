@@ -11,7 +11,7 @@
 <body>
     
 
-    <form action="" method="post">
+    <!-- <form action="" method="post">
 
         <table>
             <tr>
@@ -49,7 +49,7 @@
             </tr>
         </table>
 
-    </form>
+    </form> -->
 
     <table border="2">
 
@@ -69,7 +69,8 @@
             <td>{{i.email}}</td>
             <td>{{i.phone}}</td>
             <td>{{i.preferences}}</td>
-            <td><a href="/delete_user/{{i.audience_id}}">Delete</a></td>
+            <td><a href="/accept_user/{{i.login_id}}">Accept</a></td>
+            <td><a href="/reject_user/{{i.login_id}}">Reject</a></td>
         </tr>
 
         {%endfor%}
