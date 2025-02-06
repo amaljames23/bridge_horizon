@@ -1,31 +1,40 @@
 {% include 'filmmaker_header.html' %}
 
-<table border="1">
-    <tr>
-        <th>Film Name</th>
-        <th>Theater</th>
-        <th>Slot Date</th>
-        <th>Start Time</th>
-        <th>End Time</th>
-        <th>Seat</th>
-        <th>Payment Status</th>
-    </tr>
-    {% for booking in booked_tickets %}
-    <tr>
-        <td>{{ booking.slot.film.film_name }}</td>
-        <td>{{ booking.slot.theater.name }}</td>  <!-- Display Theater Name -->
-        <td>{{ booking.slot.date }}</td>
-        <td>{{ booking.slot.start_time }}</td>
-        <td>{{ booking.slot.end_time }}</td>
-        <td>{{ booking.seat.seat_number }}</td>  <!-- Display Seat Number -->
-        <td>{{ booking.payment_status }}</td>
-    </tr>
-    {% empty %}
-    <tr>
-        <td colspan="7">No booked tickets found.</td>
-    </tr>
-    {% endfor %}
-</table>
+<div class="container mt-5">
+    <h2 class="text-center text-primary mb-4">Booked Tickets</h2>
+    <div class="row">
+        {% for booking in booked_tickets %}
+        <div class="col-md-4 mb-4">
+            <div class="card shadow-lg border-0">
+                <div class="card-body">
+                    <h5 class="card-title text-dark fw-bold">
+                        🎬 {{ booking.slot.film.film_name }}
+                    </h5>
+                    <p class="text-muted">
+                        <i class="bi bi-geo-alt"></i> <strong>Theater:</strong> {{ booking.slot.theater.name }}
+                    </p>
+                    <p><i class="bi bi-calendar"></i> <strong>Date:</strong> {{ booking.slot.date }}</p>
+                    <p><i class="bi bi-clock"></i> <strong>Time:</strong> {{ booking.slot.start_time }} - {{ booking.slot.end_time }}</p>
+                    <p><i class="bi bi-chair"></i> <strong>Seat:</strong> {{ booking.seat.seat_number }}</p>
+                    <p class="fw-bold {% if booking.payment_status == 'Paid' %}text-success{% else %}text-danger{% endif %}">
+                        <i class="bi bi-credit-card"></i> Payment Status: {{ booking.payment_status }}
+                    </p>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12">
+            <div class="alert alert-warning text-center" role="alert">
+                <i class="bi bi-exclamation-circle"></i> No booked tickets found.
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<!-- Bootstrap CSS & Icons (Include in <head> or before </body>) -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
 
 
 {% include 'footer.html' %}
