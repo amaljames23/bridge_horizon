@@ -2,31 +2,23 @@
 
 {%include 'thearte_header.html'%}
 
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
 
-    <table border="2">
-        <tr>
-            <th>Sl.No</th>
-            <th>Payment Status</th>
-            <th>Date</th>
-        </tr>
-        
-        {% for i in bks %}
-        <tr>
-            <td>{{forloop.counter}}</td>
-            <td>{{i.payment_status}}</td>
-            <td>{{i.booking_date}}</td>
-            <td><a href="/theatre_view_payment_details/{{i.booking_id}}">View Payment Details</a></td>
-        </tr>
-        {%endfor%}
-    </table>
-</body>
-</html>
+    <div class="container">
+        <div class="row">
+            {% for i in bks %}
+            <div class="col-md-4 mb-3">
+                <div class="card border-primary shadow">
+                    <div class="card-body">
+                        <h5 class="card-title">Booking #{{ forloop.counter }}</h5>
+                        <p class="card-text"><strong>Payment Status:</strong> {{ i.payment_status }}</p>
+                        <p class="card-text"><strong>Date:</strong> {{ i.booking_date }}</p>
+                        <a href="/theatre_view_payment_details/{{i.booking_id}}" class="btn btn-primary">View Payment Details</a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
 
 {%include 'footer.html'%}

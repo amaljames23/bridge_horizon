@@ -2,38 +2,26 @@
 
 {%include 'thearte_header.html'%}
 
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
+
     
-    <table border="2">
-
-        <tr>
-            <th>Sl.No</th>
-            <th>Name</th>
-            <th>Email</th>
-            <th>Phone</th>
-            <th>Place</th>
-        </tr>
-
-        {% for i in pro %}
-
-        <tr>
-            <td>{{forloop.counter}}</td>
-            <td>{{i.name}}</td>
-            <td>{{i.email}}</td>
-            <td>{{i.phone}}</td>
-            <td>{{i.bio}}</td>
-            <td><a href="/theatre_chat/{{i.login_id}}">Chat</a></td>
-        </tr>
-
-        {%endfor%}
-
-    </table>
+    <div class="container">
+        <div class="row">
+            {% for i in pro %}
+            <div class="col-md-4 mb-3">
+                <div class="card border-primary shadow">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ i.name }}</h5>
+                        <p class="card-text"><strong>Email:</strong> {{ i.email }}</p>
+                        <p class="card-text"><strong>Phone:</strong> {{ i.phone }}</p>
+                        <p class="card-text"><strong>Place:</strong> {{ i.bio }}</p>
+                        <a href="/theatre_chat/{{i.login_id}}" class="btn btn-primary">Chat</a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    
 
 </body>
 </html>

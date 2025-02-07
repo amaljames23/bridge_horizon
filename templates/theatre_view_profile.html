@@ -3,58 +3,54 @@
 {%include 'thearte_header.html'%}
 
 {%if thup%}
-<form action="" method="post" enctype="multipart/form-data">
-    <table>
-        <tr>
-            <th>Name</th>
-            <td><input type="text" name="name" value="{{thup.name}}"></td>
-        </tr>
+<div class="container mt-4">
+    <form action="" method="post" enctype="multipart/form-data" class="p-4 border rounded shadow bg-light">
+        <div class="mb-3">
+            <label class="form-label">Name</label>
+            <input type="text" name="name" class="form-control" value="{{thup.name}}">
+        </div>
 
-        <tr>
-            <th>Email</th>
-            <td><input type="email" name="mail"  value="{{thup.email}}"></td>
-        </tr>
+        <div class="mb-3">
+            <label class="form-label">Email</label>
+            <input type="email" name="mail" class="form-control" value="{{thup.email}}">
+        </div>
 
-        <tr>
-            <th>Phone</th>
-            <td><input type="text" name="phone" value="{{thup.phone}}"></td>
-        </tr>
-        <tr>
-            <th>License</th>
-            <td><input type="file" name="photo" ></td>
-        </tr>
-        <tr>
-            <th><input type="submit" name="Add" ></th>
-        </tr>
-    </table>
-</form>
+        <div class="mb-3">
+            <label class="form-label">Phone</label>
+            <input type="text" name="phone" class="form-control" value="{{thup.phone}}">
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">License</label>
+            <input type="file" name="photo" class="form-control">
+        </div>
+
+        <button type="submit" class="btn btn-primary">Add</button>
+    </form>
+</div>
+
 
 {%else%}
 
 
-    
-<table border="2">
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card border-primary shadow">
+                <div class="card-body text-center">
+                    <h5 class="card-title">{{ th.name }}</h5>
+                    <p class="card-text"><strong>Email:</strong> {{ th.email }}</p>
+                    <p class="card-text"><strong>Phone:</strong> {{ th.phone }}</p>
+                    <div class="mb-3">
+                        <img src="/static/image/{{ th.license_photo }}" alt="License Image" class="img-fluid rounded" style="max-width: 100%; height: 250px;">
+                    </div>
+                    <a href="/thearter_owner_update_profile/{{ th.login_id }}" class="btn btn-primary">Update Profile</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
-    <tr>
-     
-        <th>Name</th>
-        <th>Email</th>
-        <th>Phone</th>
-        <th>Llicense</th>
-    </tr>
-
-
-    <tr>
-     
-        <td>{{th.name}}</td>
-        <td>{{th.email}}</td>
-        <td>{{th.phone}}</td>
-        <td><img src="/static/image/{{th.license_photo}}" alt="images" height="250px" width="250px"></td>
-        <td><a href="/thearter_owner_update_profile/{{th.login_id}}">Update Profile</a></td>
-    </tr>
-
-
-</table>
 
 {%endif%}
     
