@@ -22,8 +22,9 @@ urlpatterns = [
     path('film_maker_view_campaigns_basedon_films/<film_id>', views.film_maker_view_campaigns_basedon_films, name='film_maker_view_campaigns_basedon_films'),
     path('film_update_profile/<id>', views.film_update_profile, name='film_update_profile'),
     path('film_maker_view_mssges', views.film_maker_view_mssges, name='film_maker_view_mssges'),
-    path('film_maker_chat_owners/<login_id>', views.film_maker_chat_owners, name='film_maker_chat_owners'),
+    path('film_maker_chat_owners/<id>', views.film_maker_chat_owners, name='film_maker_chat_owners'),
     path('film_maker_view_tickets', views.film_maker_view_tickets, name='film_maker_view_tickets'),
+    path('film_maker_view_producermsg', views.film_maker_view_producermsg, name='film_maker_view_producermsg'),
 
     #####################content manager#####################
     path('content_manager_reg', views.content_manager_reg, name='content_manager_reg'),

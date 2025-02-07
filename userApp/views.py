@@ -376,19 +376,82 @@ def film_update_profile(request,id):
 # from django.shortcuts import render
 # from .models import Chat, TheaterOwner, Login
 
+# def film_maker_view_mssges(request):
+#     # Get all chat messages
+#     chats = chat.objects.all()
+
+#     # Extract unique login_ids from 'fromid' and 'toid' fields
+#     theater_owner_login_ids = set(chats.values_list('fromid', flat=True)) | set(chats.values_list('toid', flat=True))
+
+#     # Fetch TheaterOwner details where login_id matches 'fromid' or 'toid'
+#     theater_owners = TheaterOwner.objects.filter(login__login_id__in=theater_owner_login_ids).values(
+#         'owner_id', 'name', 'email', 'phone', 'profile_image', 'login__login_id'
+#     )
+
+#     return render(request, 'film_maker_view_mssges.html', {'theater_owners': theater_owners})
+
+
 def film_maker_view_mssges(request):
-    # Get all chat messages
-    chats = chat.objects.all()
+    theater_owners=TheaterOwner.objects.all()
+    return render(request,'film_maker_view_mssges.html', {'theater_owners': theater_owners})
 
-    # Extract unique login_ids from 'fromid' and 'toid' fields
-    theater_owner_login_ids = set(chats.values_list('fromid', flat=True)) | set(chats.values_list('toid', flat=True))
 
-    # Fetch TheaterOwner details where login_id matches 'fromid' or 'toid'
-    theater_owners = TheaterOwner.objects.filter(login__login_id__in=theater_owner_login_ids).values(
-        'owner_id', 'name', 'email', 'phone', 'profile_image', 'login__login_id'
+def film_maker_chat_owners(request,id):
+    owner_id=id
+    request.session["owner_id"]=owner_id
+    from_id=request.session['login_id']
+    print("hiiiiiiiiii",owner_id,from_id)
+    return render(request,'film_maker_chat_owners.html',{"toid":id})
+
+from django.db.models import Q
+
+def film_maker_view_producermsg(request):
+    print("###")
+    current_theatre_id = request.session['login_id']
+    print("&&&&&&&&&")
+    a=[]
+    chat_messages = chat.objects.filter(
+        Q(fromid=current_theatre_id, toid=request.session['owner_id']) | Q(fromid=request.session['owner_id'], toid=current_theatre_id)
     )
+    for i in chat_messages:
+        a.append({"chat_id":i.chatid,"from_id":i.fromid,"message":i.message,"date_time":i.date})
+    p=TheaterOwner.objects.get(login_id=request.session["owner_id"])
+    print(chat_messages,p.name)
+    first_name=p.name+" "
+    print(a)
+    return JsonResponse({'data':a,'first_name':first_name,'photo':"/static/image/chat_profile.jpg"})
 
-    return render(request, 'film_maker_view_mssges.html', {'theater_owners': theater_owners})
+import datetime
+
+
+def theatre_insert_theatrechat(request, msg):
+    try:
+        # Verify session variables exist
+        from_id = request.session.get('login_id')
+        to_id = request.session.get('owner_id')
+
+        print("from_id",from_id)
+        print("to_id",to_id)
+        
+        # Add error handling
+        if not from_id or not to_id:
+            return JsonResponse({'status': 'error', 'message': 'Missing session variables'})
+        
+        # Create and save chat object
+        new_chat = chat(
+            fromid=from_id, 
+            toid=to_id, 
+            message=msg, 
+            date=datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        )
+        new_chat.save()
+        
+        return JsonResponse({'status': "ok"})
+    
+    except Exception as e:
+        # Log the error and return an error response
+        print(f"Error inserting chat message: {e}")
+        return JsonResponse({'status': 'error', 'message': str(e)})
 
 
 # from django.shortcuts import render, redirect
@@ -421,35 +484,35 @@ def film_maker_view_mssges(request):
 #         'sender_id': sender_id
 #     })
 
-from django.shortcuts import render, redirect
-from django.db.models import Q
-from django.utils.timezone import now
-# from .models import Chat, TheaterOwner
+# from django.shortcuts import render, redirect
+# from django.db.models import Q
+# from django.utils.timezone import now
+# # from .models import Chat, TheaterOwner
 
-def film_maker_chat_owners(request, login_id):
-    sender_id = request.session.get('login_id')  # Filmmaker's login ID
-    receiver_id = login_id  # Theater owner's login ID
+# def film_maker_chat_owners(request, login_id):
+#     sender_id = request.session.get('login_id')  # Filmmaker's login ID
+#     receiver_id = login_id  # Theater owner's login ID
     
-    # Fetch chat messages (both sent & received)
-    messages = chat.objects.filter(
-        Q(fromid=sender_id, toid=receiver_id) | Q(fromid=receiver_id, toid=sender_id)
-    ).order_by('date')  # Order messages by date (ensure it's the correct field for ordering)
+#     # Fetch chat messages (both sent & received)
+#     messages = chat.objects.filter(
+#         Q(fromid=sender_id, toid=receiver_id) | Q(fromid=receiver_id, toid=sender_id)
+#     ).order_by('date')  # Order messages by date (ensure it's the correct field for ordering)
 
-    # Handle message sending
-    if request.method == "POST":
-        message_text = request.POST.get('message')
-        if message_text:
-            chat.objects.create(fromid=sender_id, toid=receiver_id, date=now(), message=message_text)
-            return redirect('film_maker_chat_owners', login_id=receiver_id)  # Refresh the page
+#     # Handle message sending
+#     if request.method == "POST":
+#         message_text = request.POST.get('message')
+#         if message_text:
+#             chat.objects.create(fromid=sender_id, toid=receiver_id, date=now(), message=message_text)
+#             return redirect('film_maker_chat_owners', login_id=receiver_id)  # Refresh the page
 
-    # Fetch theater owner details
-    theater_owner = TheaterOwner.objects.get(login__login_id=receiver_id)
+#     # Fetch theater owner details
+#     theater_owner = TheaterOwner.objects.get(login__login_id=receiver_id)
 
-    return render(request, 'film_maker_chat_owners.html', {
-        'messages': messages,
-        'theater_owner': theater_owner,
-        'sender_id': sender_id
-    })
+#     return render(request, 'film_maker_chat_owners.html', {
+#         'messages': messages,
+#         'theater_owner': theater_owner,
+#         'sender_id': sender_id
+#     })
 
 
 def film_maker_view_tickets(request):
