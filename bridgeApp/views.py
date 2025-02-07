@@ -116,6 +116,7 @@ def admin_send_reply(request,cid):
 
 def admin_manage_films(request):
     films=film.objects.all()
+    film_m = Filmmaker.objects.all()
 
     print(films,"////////////////////////////")
 
@@ -123,21 +124,27 @@ def admin_manage_films(request):
         film_name=request.POST['film']
         details=request.POST['deat']
         date=request.POST['redate']
+        film_maker_id=request.POST['film_maker_id']
+
+        fm_id = Filmmaker.objects.get(filmmaker_id=film_maker_id)
+
         photo=request.FILES['photo']
+
+
 
 
         fs= FileSystemStorage()
         image=fs.save(photo.name,photo)
 
         try:
-            flm=film(film_name=film_name,deatils=details,photo=image,date=date)
+            flm=film(film_name=film_name,deatils=details,photo=image,date=date,filmmaker=fm_id)
             flm.save()
             return HttpResponse("<script>alert('Film Added Successfully');window.location='/admin_manage_films';</script>")
 
         except:
             return HttpResponse("<script>alert('FAILED');window.location='/admin_manage_films';</script>")
     
-    return render(request,'admin_manage_films.html',{'films':films})
+    return render(request,'admin_manage_films.html',{'films':films,'f_m':film_m})
 
 
 def admin_delete_films(request,id):
@@ -233,3 +240,9 @@ def reject_content_manager(request,lid):
     aud.usertype='pending'
     aud.save()
     return HttpResponse("<script>alert('Reject Successfully');window.location='/admin_view_ContentManager';</script>")
+
+def admin_review_films(request,film_id):
+    cm=Review.objects.filter(film=film_id)
+    return render(request,'admin_review_films.html',{'cm':cm})
+
+

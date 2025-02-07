@@ -24,6 +24,7 @@ urlpatterns = [
     path('admin_view_ContentManager',views.admin_view_ContentManager,name='admin_view_ContentManager'),
     path('accept_content_manager/<lid>',views.accept_content_manager,name='accept_content_manager'),
     path('reject_content_manager/<lid>',views.reject_content_manager,name='reject_content_manager'),
+    path('admin_review_films/<film_id>',views.admin_review_films,name='admin_review_films'),
 
 
 ]
