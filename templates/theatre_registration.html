@@ -1,65 +1,74 @@
 
 {%include 'thearte_header.html'%}
+<br><br><br><br><br><br>
 
 
-    <form action="" method="post">
-        <table>
-            <tr>
-                <th>Theatre Name</th>
-                <td><input type="text" name="tname" ></td>
-            </tr>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
-            <tr>
-                <th>Location</th>
-                <td><input type="text" name="loca"></td>
-            </tr>
+<div class="container mt-5">
+    <div class="card shadow-lg border-primary">
+        <div class="card-header bg-primary text-white text-center">
+            <h4>Add Theatre Details</h4>
+        </div>
+        <div class="card-body">
+            <form action="" method="post">
+                <div class="mb-3">
+                    <label class="form-label">Theatre Name</label>
+                    <input type="text" name="tname" class="form-control" placeholder="Enter theatre name" required>
+                </div>
 
-            <tr>
-                <th>Capacity</th>
-                <td><input type="text" name="cap"></td>
-            </tr>
-            <tr>
-                <th>Email</th>
-                <td><input type="email" name="mail" ></td>
-            </tr>
-            <tr>
-                <th>Phone</th>
-                <td><input type="text" name="phone" ></td>
-            </tr>
+                <div class="mb-3">
+                    <label class="form-label">Location</label>
+                    <input type="text" name="loca" class="form-control" placeholder="Enter location" required>
+                </div>
 
-            <tr>
-                <th><input type="submit" name="add"></th>
-            </tr>
-        </table>
-    </form>
+                <div class="mb-3">
+                    <label class="form-label">Capacity</label>
+                    <input type="number" name="cap" class="form-control" placeholder="Enter seating capacity" required>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Email</label>
+                    <input type="email" name="mail" class="form-control" placeholder="Enter email address" required>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Phone</label>
+                    <input type="text" name="phone" class="form-control" placeholder="Enter phone number" required>
+                </div>
+
+                <div class="text-center">
+                    <button type="submit" name="add" class="btn btn-primary px-4">Add Theatre</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
 
 
     
-    <table border="2">
-        <tr>
-            <th>SL.NO</th>
-            <th>Thearte Name</th>
-            <th>Location</th>
-            <th>Capacity</th>
-            <th>Email</th>
-            <th>Phone</th>
-        </tr>
-
+<div class="container mt-4">
+    <div class="row">
         {% for thearte in th %}
-
-        <tr>
-            <td>{{ forloop.counter}}</td>
-            <td>{{thearte.name}}</td>
-            <td>{{thearte.location}}</td>
-            <td>{{thearte.capacity}}</td>
-            <td>{{thearte.contact_email}}</td>
-            <td>{{thearte.contact_phone}}</td>
-            <td><a href="/theatre_manage_seats/{{thearte.theater_id}}">Manage Seats</a></td>
-            <td><a href="/theatre_manage_slots/{{thearte.theater_id}}">Manage Slot</a></td>
-          
-        </tr>
+        <div class="col-md-4 mb-4">
+            <div class="card border-primary shadow">
+                <div class="card-body">
+                    <h5 class="card-title text-primary">🎭 {{ thearte.name }}</h5>
+                    <p class="card-text"><strong>📍 Location:</strong> {{ thearte.location }}</p>
+                    <p class="card-text"><strong>🪑 Capacity:</strong> {{ thearte.capacity }}</p>
+                    <p class="card-text"><strong>📧 Email:</strong> {{ thearte.contact_email }}</p>
+                    <p class="card-text"><strong>📞 Phone:</strong> {{ thearte.contact_phone }}</p>
+                    
+                    <div class="text-center">
+                        <a href="/theatre_manage_slots/{{thearte.theater_id}}" class="btn btn-primary">Manage Slot</a>
+                    </div>
+                </div>
+            </div>
+        </div>
         {% endfor %}
-    </table>
+    </div>
+</div>
 
     
 

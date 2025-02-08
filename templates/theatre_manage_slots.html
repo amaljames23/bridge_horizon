@@ -2,110 +2,120 @@
 
 {%include 'thearte_header.html'%}
 
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
+<br><br><br><br><br><br><br>
 {% if upst %}
-    <form action="" method="post">
-        <table>
-            <tr>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
-                <th>Fim Name</th>
+<div class="container mt-5">
+    <div class="card border-primary shadow">
+        <div class="card-header bg-primary text-white">
+            <h4 class="text-center mb-0">Manage Screening Slot</h4>
+        </div>
+        <div class="card-body">
+            <form action="" method="post">
+                
+                <div class="mb-3">
+                    <label for="flm" class="form-label">🎬 Film Name</label>
+                    <select name="flm" id="cat" class="form-select">
+                        {% for i in flm %}
+                        <option value="{{ i.filmid }}" {% if upst and upst.film_id == i.filmid %}selected{% endif %}>
+                            {{ i.film_name }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
 
-                <td>
-                <select name="flm" id="cat" class="form-input">
-                    {% for i in flm %}
-                    <option value="{{ i.filmid}}">{{ i.film_name}}</option>
-                    {% endfor %}
-                </select>
+                <div class="mb-3">
+                    <label for="stime" class="form-label">⏰ Start Time</label>
+                    <input type="time" name="stime" id="stime" class="form-control" value="{{ upst.start_time }}" required>
+                </div>
 
-            </td>
-            </tr>
+                <div class="mb-3">
+                    <label for="endtime" class="form-label">⏳ End Time</label>
+                    <input type="time" name="endtime" id="endtime" class="form-control" value="{{ upst.end_time|default:'' }}" required>
+                </div>
 
-            <tr>
-                <th>Start Time</th>
-                <td><input type="time" name="stime"  value="{{upst.start_time}}"></td>
-            </tr>
-            <tr>
-                <th>End Time</th>
-                <td><input type="time" name="endtime" value="{{upst.end_time}}"></td>
-            </tr>
+                <div class="mb-3">
+                    <label for="date" class="form-label">📅 Date</label>
+                    <input type="date" name="date" id="date" class="form-control" value="{{ upst.date }}" required>
+                </div>
 
-            <tr>
-                <th>Date</th>
-                <td><input type="date" name="date" value="{{upst.date}}" ></td>
-            </tr>
+                <div class="text-center">
+                    <button type="submit" name="add" class="btn btn-success px-4">
+                        {% if upst %} Update Slot {% else %} Add Slot {% endif %}
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 
-            <tr>
-                <td><input type="submit" name="add" ></td>
-            </tr>
-        </table>
-    </form>
 {% else %}
 
-    <form action="" method="post">
-        <table>
-            <tr>
+<div class="container mt-5">
+    <div class="card border-primary shadow">
+        <div class="card-header bg-primary text-white">
+            <h4 class="text-center mb-0">Manage Screening Slot</h4>
+        </div>
+        <div class="card-body">
+            <form action="" method="post">
+                {% csrf_token %}
+                
+                <div class="mb-3">
+                    <label for="flm" class="form-label">🎬 Film Name</label>
+                    <select name="flm" id="flm" class="form-select">
+                        {% for i in flm %}
+                        <option value="{{ i.filmid }}">{{ i.film_name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
 
-                <th>Fim Name</th>
+                <div class="mb-3">
+                    <label for="stime" class="form-label">⏰ Start Time</label>
+                    <input type="time" name="stime" id="stime" class="form-control" required>
+                </div>
 
-                <td>
-                <select name="flm" id="cat" class="form-input">
-                    {% for i in flm %}
-                    <option value="{{ i.filmid}}">{{ i.film_name}}</option>
-                    {% endfor %}
-                </select>
+                <div class="mb-3">
+                    <label for="endtime" class="form-label">⏳ End Time</label>
+                    <input type="time" name="endtime" id="endtime" class="form-control" required>
+                </div>
 
-            </td>
-            </tr>
+                <div class="mb-3">
+                    <label for="date" class="form-label">📅 Date</label>
+                    <input type="date" name="date" id="date" class="form-control" required>
+                </div>
 
-            <tr>
-                <th>Start Time</th>
-                <td><input type="time" name="stime"></td>
-            </tr>
-            <tr>
-                <th>End Time</th>
-                <td><input type="time" name="endtime"></td>
-            </tr>
-
-            <tr>
-                <th>Date</th>
-                <td><input type="date" name="date" ></td>
-            </tr>
-
-            <tr>
-                <td><input type="submit" name="add" ></td>
-            </tr>
-        </table>
-    </form>
-
-    <table border="2">
-        <tr>
-            <th>Sl.No</th>
-            <th>Film Name</th>
-            <th>Start Time</th>
-            <th>End Time</th>
-            <th>Date</th>
-        </tr>
+                <div class="text-center">
+                    <button type="submit" name="add" class="btn btn-success px-4">Add Slot</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<br><br><br><br>
+<div class="container mt-5">
+    <h3 class="text-center mb-4">🎬 Slot Management</h3>
+    <div class="row">
         {% for slot in st %}
-
-        <tr>
-            <td>{{forloop.counter}}</td>
-            <td>{{slot.film.film_name}}</td>
-            <td>{{slot.start_time}}</td>
-            <td>{{slot.end_time}}</td>
-            <td>{{slot.date}}</td>
-            <td><a href="/theatre_update_slots/{{slot.slot_id}}">Update</a></td>
-            <td><a href="/theatre_delete_slots/{{slot.slot_id}}">Delete</a></td>
-            <td><a href="/thearte_view_booking/{{slot.slot_id}}">View Bookings</a></td>
-        </tr>
+        <div class="col-md-4 mb-4">
+            <div class="card border-primary shadow">
+                <div class="card-body">
+                    <h5 class="card-title text-primary">{{ slot.film.film_name }}</h5>
+                    <p class="card-text"><strong>⏰ Start Time:</strong> {{ slot.start_time }}</p>
+                    <p class="card-text"><strong>⏳ End Time:</strong> {{ slot.end_time }}</p>
+                    <p class="card-text"><strong>📅 Date:</strong> {{ slot.date }}</p>
+                    <div class="d-flex flex-wrap gap-2">
+                        <a href="/theatre_update_slots/{{slot.slot_id}}" class="btn btn-warning btn-sm">✏️ Update</a>
+                        <a href="/theatre_delete_slots/{{slot.slot_id}}" class="btn btn-danger btn-sm">🗑️ Delete</a>
+                        <a href="/thearte_view_booking/{{slot.slot_id}}" class="btn btn-info btn-sm">📜 View Bookings</a>
+                        <a href="/theatre_manage_seats/{{slot.slot_id}}/{{th_id}}" class="btn btn-success btn-sm">🎟️ Manage Seats</a>
+                    </div>
+                </div>
+            </div>
+        </div>
         {% endfor %}
-    </table>
-
+    </div>
+</div>
 {% endif %}
 
 </body>

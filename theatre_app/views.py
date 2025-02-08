@@ -99,13 +99,13 @@ def theatre_view_others_theartes(request):
     return render(request,'theatre_view_others_theartes.html',{'th':th})
 
 
-def theatre_manage_seats(request,id):
-    st=TheaterSeat.objects.filter(theater_id=id)
+def theatre_manage_seats(request,slot_id,theater_id):
+    st=TheaterSeat.objects.filter(theater_id=theater_id)
     if request.method=='POST':
         seat_number=request.POST['snum']
         seat_type=request.POST['stype']
 
-        ts=TheaterSeat(theater_id=id,seat_number=seat_number,seat_type=seat_type,status='pending')
+        ts=TheaterSeat(theater_id=theater_id,seat_number=seat_number,seat_type=seat_type,status='pending',slot_id=slot_id)
         ts.save()
 
         return HttpResponse("<script>alert('Added Successfully');window.location='/thearte_registration';</script>")
@@ -126,7 +126,7 @@ def theatre_manage_slots(request,id):
         ts.save()
 
         return HttpResponse("<script>alert('Added Successfully');window.location='/thearte_registration';</script>")
-    return render(request,'theatre_manage_slots.html',{'flm':flm,'st':st})
+    return render(request,'theatre_manage_slots.html',{'flm':flm,'st':st,'th_id':id})
 
 def theatre_update_slots(request,id):
     flm=film.objects.all()

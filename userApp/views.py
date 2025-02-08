@@ -89,6 +89,10 @@ def user_seat_confirm(request):
         # Fetch the screening slot from the database using the correct field (assuming slot_id is the correct field)
         try:
             screening_slot = ScreeningSlot.objects.get(slot_id=screening_slot_id)  # Use slot_id instead of id
+
+            owner_id = screening_slot.theater.owner_id
+
+            owner_l_id = Login.objects.get(pk=owner_id)
         except ScreeningSlot.DoesNotExist:
             return JsonResponse({"success": False, "error": "Screening slot not found."})
 
@@ -105,6 +109,8 @@ def user_seat_confirm(request):
                 # If any seat doesn't exist or isn't available, add to the unavailable list
                 unavailable_seats.append(seat_id)
 
+        local_time = timezone.localtime(timezone.now())
+
         # If there are unavailable seats, return an error message
         if unavailable_seats:
             return JsonResponse({"success": False, "error": f"Seats {', '.join(map(str, unavailable_seats))} are not available or do not exist."})
@@ -114,7 +120,7 @@ def user_seat_confirm(request):
         booked_seats = []
         for seat in seats_to_book:
             # Create a SeatBooking entry for each seat
-            SeatBooking.objects.create(
+            booking = SeatBooking.objects.create(
                 slot=screening_slot,
                 seat=seat,
                 audience=aud_id,  # You can set this to the audience if applicable
@@ -122,6 +128,16 @@ def user_seat_confirm(request):
                 payment_status="paid",  # Set the payment status as "pending" initially
                 booking_date=timezone.now()  # Set the booking date to the current time
             )
+
+            Payment.objects.create(
+                booking=booking,
+                payer=aud_id.login,  # Set the payer (user making the payment)
+                receiver=owner_l_id,  # Set the receiver (e.g., filmmaker or admin)
+                amount=total_amount,  # Assuming seat has a price attribute
+                transaction_date=local_time,
+                status="completed"  # Set payment status
+            )
+
             seat.status = "booked"  # Mark each seat as booked
             seat.save()
             booked_seats.append(seat.seat_id)  # Add the seat_id to the list of booked seats
