@@ -1,24 +1,41 @@
 
 
 {%include 'thearte_header.html'%}
+<br><br><br><br><br>
 
+<div class="container">
+    <div class="row">
+        {% for i in bks %}
+        <div class="col-md-4 mb-3">
+            <div class="card border-primary shadow">
+                <div class="card-body">
+                    <h5 class="card-title">Booking #{{ forloop.counter }}</h5>
+                    <p class="card-text"><strong>Payment Status:</strong> {{ i.payment_status }}</p>
+                    <p class="card-text"><strong>Date:</strong> {{ i.booking_date }}</p>
+                    
+                    <p class="card-text"><strong>Seat Number:</strong> {{ i.seat.seat_number }} ({{ i.seat.seat_type }})</p>
 
-    <div class="container">
-        <div class="row">
-            {% for i in bks %}
-            <div class="col-md-4 mb-3">
-                <div class="card border-primary shadow">
-                    <div class="card-body">
-                        <h5 class="card-title">Booking #{{ forloop.counter }}</h5>
-                        <p class="card-text"><strong>Payment Status:</strong> {{ i.payment_status }}</p>
-                        <p class="card-text"><strong>Date:</strong> {{ i.booking_date }}</p>
-                        <a href="/theatre_view_payment_details/{{i.booking_id}}" class="btn btn-primary">View Payment Details</a>
-                    </div>
+                    {% if i.audience %}
+                        <p class="card-text"><strong>Booked by:</strong> {{ i.audience.name }} <span class="text-success">(Audience)</span></p>
+                        <p class="card-text"><strong>Email:</strong> {{ i.audience.email }}</p>
+                        <p class="card-text"><strong>Phone:</strong> {{ i.audience.phone }}</p>
+                    {% elif i.filmmaker %}
+                        <p class="card-text"><strong>Booked by:</strong> {{ i.filmmaker.name }} <span class="text-primary">(Filmmaker)</span></p>
+                        <p class="card-text"><strong>Email:</strong> {{ i.filmmaker.email }}</p>
+                        <p class="card-text"><strong>Phone:</strong> {{ i.filmmaker.phone }}</p>
+                    {% else %}
+                        <p class="card-text text-danger"><strong>Booked by:</strong> Unknown</p>
+                    {% endif %}
+
+                    <a href="/theatre_view_payment_details/{{ i.booking_id }}" class="btn btn-primary">View Payment Details</a>
                 </div>
             </div>
-            {% endfor %}
         </div>
+        {% endfor %}
     </div>
+</div>
+
+
 
 
 {%include 'footer.html'%}

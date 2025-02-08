@@ -4,30 +4,33 @@
 
 {%include 'thearte_header.html'%}
 
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-
-    <table border="2">
-        <tr>
-            <th>Sl.No</th>
-            <th>Amount</th>
-            <th>Transaction Date</th>
-            <th>Status</th>
-        </tr>
+<br><br><br><br><br>
+<div class="container">
+    <div class="row">
         {% for i in pmt %}
-        <tr>
-            <td>{{forloop.counter}}</td>
-            <td>{{i.amount}}</td>
-            <td>{{i.transaction_date}}</td>
-            <td>{{i.status}}</td>
-        </tr>
-        {%endfor%}
-    </table>
+        <div class="col-md-4 mb-3">
+            <div class="card border-primary shadow">
+                <div class="card-body">
+                    <h5 class="card-title">Transaction #{{ forloop.counter }}</h5>
+                    <p class="card-text"><strong>Amount:</strong> ₹{{ i.amount }}</p>
+                    <p class="card-text"><strong>Transaction Date:</strong> {{ i.transaction_date }}</p>
+                    <p class="card-text">
+                        <strong>Status:</strong> 
+                        {% if i.status == "completed" %}
+                            <span class="badge bg-success">Completed</span>
+                        {% elif i.status == "pending" %}
+                            <span class="badge bg-warning text-dark">Pending</span>
+                        {% else %}
+                            <span class="badge bg-danger">Failed</span>
+                        {% endif %}
+                    </p>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
     
 </body>
 </html>
