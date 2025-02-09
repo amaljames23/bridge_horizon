@@ -64,7 +64,7 @@ def user_view_theaters(request):
 
 def user_book_seats(request, theater_id, screening_slot_id):
     # Fetch seats related to the selected screening slot
-    seats = TheaterSeat.objects.filter(slot_id=screening_slot_id)
+    seats = TheaterSeat.objects.filter(slot_id=screening_slot_id,theater_id=theater_id)
 
     return render(request, 'user_book_seats.html', {'seats': seats, 'screening_slot_id': screening_slot_id})
 
@@ -202,6 +202,22 @@ def user_view_booked_tickets(request):
     }
 
     return render(request, 'user_view_booked_tickets.html', context)
+
+
+from django.db.models import Count
+# from django.shortcuts import render
+# from your_app.models import Film
+
+def user_view_film_recommendations(request):
+    # Get films ranked by number of bookings
+    
+    films_ranked = film.objects.annotate(
+        booking_count=Count('screeningslot__seatbooking')
+    ).order_by('-booking_count')
+
+    # Pass the ranked films to the template
+    return render(request, 'user_view_film_recommendations.html', {'films_ranked': films_ranked})
+
 
 
 

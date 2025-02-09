@@ -26,6 +26,7 @@
     <div class="card-container">
         {% for i in pro %}
         <div class="card shadow-sm">
+            <img src="static/image/{{ i.profile_image }}" class="card-img-top" alt="Profile Image">
             <div class="card-body">
                 <h5 class="card-title">{{ i.name }}</h5>
                 <p class="card-text"><strong>Email:</strong> {{ i.email }}</p>

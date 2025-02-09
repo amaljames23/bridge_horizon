@@ -8,32 +8,31 @@
 
       <div class="row gy-4 align-items-center justify-content-between">
 
-        <div class="col-xl-5" data-aos="fade-up" data-aos-delay="200">
+        <div class="col-xl-12" data-aos="fade-up" data-aos-delay="200">
           <span class="about-meta">List of movies</span>
-          <h2 class="about-title">Voluptas enim suscipit temporibus</h2>
-          <table class="table table-striped">
-            <tr>
-                <th>Sl.No</th>
-                <th>Date</th>
-                <th>Details</th>
-                <th>Film Name</th>
-                <th>Photo</th>
-                <th></th>
-            </tr>
-            {% for i in films %}
-            <tr>
-                <td>{{ forloop.counter }}</td>
-                <td>{{ i.date }}</td>
-                <td>{{ i.deatils }}</td>
-                <td>{{ i.film_name }}</td>
-                <td><img src="{{ i.photo }}" alt="Film Photo" width="100"></td>
-                <td><a href="/user_view_theaters">Theaters</a></td>
-            </tr>
-            {% endfor %}
-        </table>
+          <div class="container">
+            <h2 class="text-center my-4">Films playing..</h2>
+            <div class="row">
+                {% for i in films %}
+                <div class="col-md-4 mb-4">
+                    <div class="card shadow">
+                        <img src="static/image/{{ i.photo }}" class="card-img-top" alt="{{ i.film_name }}" style="height: 250px; object-fit: cover;">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ i.film_name }}</h5>
+                            <p class="card-text"><strong>Date:</strong> {{ i.date }}</p>
+                            <p class="card-text">{{ i.deatils }}</p>
+                            <a href="/user_view_theaters" class="btn btn-primary">View Theaters</a>
+                            <a href="/use_add_rating/{{ i.filmid }}" class="btn btn-secondary">Add Rating</a>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        
         </div>
 
-        <div class="col-xl-6" data-aos="fade-up" data-aos-delay="300">
+        <!-- <div class="col-xl-6" data-aos="fade-up" data-aos-delay="300">
           <div class="image-wrapper">
             <div class="images position-relative" data-aos="zoom-out" data-aos-delay="400">
               <img src="/static/assets/img/about-5.webp" alt="Business Meeting" class="img-fluid main-image rounded-4">
@@ -44,7 +43,7 @@
               <p>Of experience in business service</p>
             </div>
           </div>
-        </div>
+        </div> -->
       </div>
 
     </div>
