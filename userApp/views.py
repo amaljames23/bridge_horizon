@@ -219,6 +219,17 @@ def user_view_film_recommendations(request):
     return render(request, 'user_view_film_recommendations.html', {'films_ranked': films_ranked})
 
 
+def user_view_promotion_details(request, filmid):
+    # film_res = get_object_or_404(film, film_id=filmid)
+    
+    # Fetch only accepted promo materials
+    promo_materials = PromoMaterial.objects.filter(film_id=filmid, status="Accepted")
+
+    return render(request, 'user_view_promotion_details.html', {
+        'film_res': filmid,
+        'promo_materials': promo_materials
+    })
+
 
 
 #######################################film maker

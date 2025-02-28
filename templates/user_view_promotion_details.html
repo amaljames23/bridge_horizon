@@ -1,0 +1,28 @@
+{% include 'user_header.html' %}
+<br><br><br>
+
+<div class="container mt-5">
+    <h2 class="text-center">Promotion Details for {{ film_res.title }}</h2>
+
+    <div class="row">
+        {% for promo in promo_materials %}
+        <div class="col-md-4">
+            <div class="card shadow-lg mb-4">
+                <img src="/static/image/{{ promo.poster }}" class="card-img-top" alt="Promo Poster">
+                <div class="card-body">
+                    <h5 class="card-title">{{ promo.title }}</h5>
+                    <p class="card-text">{{ promo.description }}</p>
+                    <p class="text-muted"><strong>Release Date:</strong> {{ promo.release_date }}</p>
+                    
+                    <span class="badge bg-success">Accepted</span>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <p class="text-center">No accepted promotion materials available for this film.</p>
+        {% endfor %}
+    </div>
+</div>
+
+<br><br>
+{% include 'footer.html' %}

@@ -12,6 +12,7 @@ urlpatterns = [
     path('use_add_rating/<film_id>', views.use_add_rating, name='use_add_rating'),
     path('user_view_booked_tickets', views.user_view_booked_tickets, name='user_view_booked_tickets'),
     path('user_view_film_recommendations', views.user_view_film_recommendations, name='user_view_film_recommendations'),
+    path('user_view_promotion_details/<filmid>', views.user_view_promotion_details, name='user_view_promotion_details'),
     ################film maker################
     path('filmaker_reg/', views.filmaker_reg, name='filmaker_reg'),
     path('filmaker_home/', views.filmaker_home, name='filmaker_home'),
