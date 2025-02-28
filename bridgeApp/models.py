@@ -150,6 +150,7 @@ class PromoMaterial(models.Model):
     description = models.CharField(max_length=500)  # Description (as CharField)
     release_date = models.CharField(max_length=50)  # Release date (as CharField)
     poster = models.CharField(max_length=255) 
+    status = models.CharField(max_length=255,null=True) 
 
 class chat(models.Model):
     chatid=models.AutoField(primary_key=True)

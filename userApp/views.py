@@ -496,7 +496,8 @@ def film_maker_add_promotion_materials(request, film_id):
             title=title,
             description=description,
             release_date=release_date,
-            poster=poster_path
+            poster=poster_path,
+            status = "Pending"
         )
         promo.save()
 
@@ -750,3 +751,34 @@ def content_manager_view_reviewratings(request, filmid):
 
     context = {'film_reviews': film_reviews}
     return render(request, "content_manager_view_reviewratings.html", context)
+
+
+
+
+from django.shortcuts import render, get_object_or_404
+
+def conter_manager_view_promo(request, film_id): 
+    # Fetch the film object
+    film_instance = get_object_or_404(film, filmid=film_id)
+    
+    # Get all promo materials related to the film
+    promo_materials = PromoMaterial.objects.filter(film=film_instance)
+
+    return render(request, "conter_manager_view_promo.html", {
+        'film': film_instance,
+        'promo_materials': promo_materials
+    })
+
+
+
+def accept_promo_material(request, promo_id):
+    promo = get_object_or_404(PromoMaterial, promo_id=promo_id)
+    promo.status = "Accepted"
+    promo.save()
+    return HttpResponse("<script>alert('Promotion Material Accepted Successfully');window.location='/conter_manager_view_films_to_make_campaign';</script>") # Redirect back to the promo list
+
+def reject_promo_material(request, promo_id):
+    promo = get_object_or_404(PromoMaterial, promo_id=promo_id)
+    promo.status = "Rejected"
+    promo.save()
+    return HttpResponse("<script>alert('Promotion Material Rejected Successfully');window.location='/conter_manager_view_films_to_make_campaign';</script>")

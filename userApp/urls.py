@@ -37,7 +37,10 @@ urlpatterns = [
     path('conter_manager_view_films_to_make_campaign', views.conter_manager_view_films_to_make_campaign, name='conter_manager_view_films_to_make_campaign'),
     path('content_manager_manage_campaigns/<film_id>/<film_m_id>', views.content_manager_manage_campaigns, name='content_manager_manage_campaigns'),
     path('update_campaign/<cam_id>', views.update_campaign, name='update_campaign'),
+    path('conter_manager_view_promo/<film_id>', views.conter_manager_view_promo, name='conter_manager_view_promo'),
     path('content_manager_view_review&ratings/<filmid>', views.content_manager_view_reviewratings, name='content_manager_view_review&ratings'),
+    path('accept_promo_material/<int:promo_id>/', views.accept_promo_material, name='accept_promo_material'),
+    path('reject_promo_material/<int:promo_id>/', views.reject_promo_material, name='reject_promo_material'),
     
 
 ]

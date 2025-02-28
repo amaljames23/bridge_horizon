@@ -1,0 +1,39 @@
+{% include 'content_manager_header.html' %}
+<br><br><br>
+
+<div class="container mt-5">
+    <h2 class="text-center">Promotion Materials for {{ film.title }}</h2>
+    
+    <div class="row">
+        {% for promo in promo_materials %}
+        <div class="col-md-4">
+            <div class="card shadow-lg mb-4">
+                <img src="/static/image{{ promo.poster }}" class="card-img-top" alt="Promo Poster">
+                <div class="card-body">
+                    <h5 class="card-title">{{ promo.title }}</h5>
+                    <p class="card-text">{{ promo.description }}</p>
+                    <p class="text-muted"><strong>Release Date:</strong> {{ promo.release_date }}</p>
+                    
+                    <p><strong>Status:</strong> {{ promo.status }}</p>
+
+                    {% if promo.status == "pending" %}
+                        <a href="/accept_promo_material/{{ promo.promo_id }}" class="btn btn-success">Accept</a>
+                        <a href="/reject_promo_material/{{ promo.promo_id }}" class="btn btn-danger">Reject</a>
+                    {% elif promo.status == "Accepted" %}
+                        <span class="badge bg-success">Accepted</span>
+                        <a href="/reject_promo_material/{{ promo.promo_id }}" class="btn btn-danger">Reject</a>
+                    {% elif promo.status == "Rejected" %}
+                        <a href="/accept_promo_material/{{ promo.promo_id }}" class="btn btn-success">Accept</a>
+                        <span class="badge bg-danger">Rejected</span>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <p class="text-center">No promotion materials available for this film.</p>
+        {% endfor %}
+    </div>
+</div>
+
+<br><br>
+{% include 'footer.html' %}
