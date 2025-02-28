@@ -1,0 +1,60 @@
+{% include 'filmmaker_header.html' %}
+<br><br><br><br><br>
+
+<div class="container mt-5 w-50">
+    <div class="card shadow-lg p-4">
+        <h3 class="text-center mb-4">Add Promotion Materials</h3>
+        <form action="" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            
+            <input type="hidden" name="film_id" value="{{ film_id }}">
+
+            <div class="mb-3">
+                <label for="title" class="form-label">Poster Title</label>
+                <input type="text" class="form-control" id="title" name="title" placeholder="Enter poster title" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="description" class="form-label">Description</label>
+                <textarea class="form-control" id="description" name="description" rows="3" placeholder="Enter description" required></textarea>
+            </div>
+
+            <div class="mb-3">
+                <label for="release_date" class="form-label">Release Date</label>
+                <input type="date" class="form-control" id="release_date" name="release_date" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="poster" class="form-label">Upload Poster</label>
+                <input type="file" class="form-control" id="poster" name="poster" accept="image/*" required>
+            </div>
+            
+            <button type="submit" class="btn btn-success w-100">Submit Promotion Material</button>
+        </form>
+    </div>
+</div>
+
+<!-- Display Promotion Materials -->
+<div class="container mt-5">
+    <h3 class="text-center mb-4">Added Promotion Materials</h3>
+    <div class="row">
+        {% for promo in promo_materials %}
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 shadow">
+                <img src="/static/image/{{ promo.poster }}" class="card-img-top" alt="Promotion Material">
+                <div class="card-body">
+                    <h5 class="card-title">{{ promo.title }}</h5>
+                    <p class="card-text">{{ promo.description }}</p>
+                    <p class="card-text"><small class="text-muted">Release Date: {{ promo.release_date }}</small></p>
+                    <a href="/delete_promo_materials/{{ promo.promo_id }}" class="btn btn-danger">delete</a>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <p class="text-center">No promotion materials added yet.</p>
+        {% endfor %}
+    </div>
+</div>
+
+<br><br><br><br>
+{% include 'footer.html' %}

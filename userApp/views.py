@@ -470,6 +470,58 @@ def film_maker_view_producermsg(request):
     print(a)
     return JsonResponse({'data':a,'first_name':first_name,'photo':"/static/image/chat_profile.jpg"})
 
+
+def film_maker_view_films(request):
+    films=film.objects.filter(filmmaker_id=request.session['fm_id'])
+    return render(request,'film_maker_view_films.html',{'films':films})
+
+
+def film_maker_add_promotion_materials(request, film_id):
+    if request.method == 'POST':
+        title = request.POST['title']
+        description = request.POST['description']
+        release_date = request.POST['release_date']
+        poster = request.FILES['poster']  # File upload handling
+
+        # Save file to media storage
+        fs = FileSystemStorage()
+        poster_path = fs.save(poster.name, poster)
+
+        # Get the associated film instance
+        film_instance = film.objects.get(filmid=film_id)
+
+        # Save promo material
+        promo = PromoMaterial(
+            film=film_instance,
+            title=title,
+            description=description,
+            release_date=release_date,
+            poster=poster_path
+        )
+        promo.save()
+
+        return HttpResponse("<script>alert('Promotion Material Added Successfully');window.location='/film_maker_view_films';</script>".format(film_id))
+    
+
+    # Fetch all promotion materials for this film
+    promo_materials = PromoMaterial.objects.filter(film_id=film_id)
+
+    return render(request, 'film_maker_add_promotion_materials.html', {
+        'film_id': film_id,
+        'promo_materials': promo_materials
+    })
+
+
+def delete_promo_materials(request, promo_id):
+    promo = PromoMaterial.objects.get(promo_id=promo_id)
+
+    film_id = promo.film.filmid  # Get the associated film ID before deleting
+    promo.delete()
+
+    return HttpResponse("<script>alert('Promotion Material Deleted Successfully');window.location='/film_maker_view_films';</script>".format(film_id))
+
+
+
 import datetime
 
 

@@ -143,6 +143,13 @@ class notification(models.Model):
     title=models.CharField(max_length=225)
     date=models.CharField(max_length=225)
 
+class PromoMaterial(models.Model):
+    promo_id = models.AutoField(primary_key=True)  # Primary key
+    film = models.ForeignKey(film, on_delete=models.CASCADE)  # Foreign key to the Film model
+    title = models.CharField(max_length=255)  # Poster title
+    description = models.CharField(max_length=500)  # Description (as CharField)
+    release_date = models.CharField(max_length=50)  # Release date (as CharField)
+    poster = models.CharField(max_length=255) 
 
 class chat(models.Model):
     chatid=models.AutoField(primary_key=True)

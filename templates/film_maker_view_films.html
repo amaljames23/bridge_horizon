@@ -1,0 +1,33 @@
+{% include 'filmmaker_header.html' %}
+<br><br><br><br>
+
+
+
+<div class="container mt-5">
+    <h3 class="text-center mb-4">Approved Films</h3>
+    <div class="row">
+        {% for film in films %}
+        <div class="col-md-4 mb-4">
+            <div class="card h-100">
+                <img src="/static/image/{{ film.photo }}" class="card-img-top" alt="Film Image">
+                <div class="card-body">
+                    <h5 class="card-title">{{ film.film_name }}</h5>
+                    <p class="card-text">{{ film.deatils }}</p>
+                    <p class="card-text"><small class="text-muted">Release Date: {{ film.date }}</small></p>
+                    <a href="/film_maker_add_promotion_materials/{{ film.filmid }}" class="btn btn-primary w-100">Add promotion materials</a>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <p class="text-center">No approved films available.</p>
+        {% endfor %}
+    </div>
+</div>
+
+
+
+
+
+
+
+{% include 'footer.html' %}

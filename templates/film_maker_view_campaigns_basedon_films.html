@@ -12,9 +12,7 @@
                     <p><i class="bi bi-calendar-check"></i> <strong>Start Date:</strong> {{ i.start_date }}</p>
                     <p><i class="bi bi-calendar-x"></i> <strong>End Date:</strong> {{ i.end_date }}</p>
                     <p><i class="bi bi-currency-dollar"></i> <strong>Budget:</strong> ${{ i.budget }}</p>
-                    <p class="fw-bold {% if i.status == 'Active' %}text-success{% else %}text-danger{% endif %}">
-                        <i class="bi bi-graph-up-arrow"></i> Status: {{ i.status }}
-                    </p>
+                    
                 </div>
             </div>
         </div>

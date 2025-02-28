@@ -26,6 +26,9 @@ urlpatterns = [
     path('film_maker_chat_owners/<id>', views.film_maker_chat_owners, name='film_maker_chat_owners'),
     path('film_maker_view_tickets', views.film_maker_view_tickets, name='film_maker_view_tickets'),
     path('film_maker_view_producermsg', views.film_maker_view_producermsg, name='film_maker_view_producermsg'),
+    path('film_maker_view_films', views.film_maker_view_films, name='film_maker_view_films'),
+    path('film_maker_add_promotion_materials/<film_id>', views.film_maker_add_promotion_materials, name='film_maker_add_promotion_materials'),
+    path('delete_promo_materials/<int:promo_id>/', views.delete_promo_materials, name='delete_promo_materials'),
 
     #####################content manager#####################
     path('content_manager_reg', views.content_manager_reg, name='content_manager_reg'),
