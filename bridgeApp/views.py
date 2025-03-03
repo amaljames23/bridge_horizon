@@ -150,7 +150,7 @@ def admin_manage_films(request):
 def admin_delete_films(request,id):
     fimdet=film.objects.get(filmid=id)
     fimdet.delete()
-    return HttpResponse("<script>alert(' Deleted Successfully');window.location='/admin_manage_films';</script>")
+    return HttpResponse("<script>alert(' Deleted Successfully');window.location='/film_maker_view_films';</script>")
 
 
 def admin_update_films(request,id):
@@ -170,7 +170,7 @@ def admin_update_films(request,id):
         fimupd.date=date
         fimupd.photo=image
         fimupd.save()
-        return HttpResponse("<script>alert('Film Updated Successfully');window.location='/admin_manage_films';</script>")
+        return HttpResponse("<script>alert('Film Updated Successfully');window.location='/film_maker_view_films';</script>")
 
 
     return render(request,'admin_manage_films.html',{'fimupd':fimupd})

@@ -1,0 +1,42 @@
+{% include 'filmmaker_header.html' %}
+<br><br><br>
+
+<div class="container">
+    <div class="row">
+        {% for booking in bookings %}
+        <div class="col-md-4 mb-3">
+            <div class="card border-primary shadow">
+                <div class="card-body">
+                    <h5 class="card-title">{{ booking.film.film_name }}</h5>
+                    <p class="card-text"><strong>Film Details:</strong> {{ booking.film.deatils }}</p>
+                    <p class="card-text"><strong>Booking Date:</strong> {{ booking.date }}</p>
+                    <p class="card-text"><strong>Status:</strong> <span class="badge {% if booking.status == 'Approved' %}bg-success{% elif booking.status == 'Rejected' %}bg-danger{% else %}bg-warning{% endif %}">
+                        {{ booking.status }}</span></p>
+
+                    <hr>
+                    <h6>Theater Details</h6>
+                    <p class="card-text"><strong>Name:</strong> {{ booking.theater.name }}</p>
+                    <p class="card-text"><strong>Location:</strong> {{ booking.theater.location }}</p>
+                    <p class="card-text"><strong>Capacity:</strong> {{ booking.theater.capacity }}</p>
+
+                    <hr>
+                    <h6>Theater Owner</h6>
+                    <p class="card-text"><strong>Name:</strong> {{ booking.theater.owner.name }}</p>
+                    <p class="card-text"><strong>Email:</strong> {{ booking.theater.owner.email }}</p>
+                    <p class="card-text"><strong>Phone:</strong> {{ booking.theater.owner.phone }}</p>
+
+                    {% if booking.status == "Pending" %}
+                    <a href="/cancel_booking/{{ booking.Booktheater_id }}" class="btn btn-danger">Cancel Request</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-md-12 text-center">
+            <p>No booking requests found.</p>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+{% include 'footer.html' %}

@@ -1,0 +1,33 @@
+{% include 'thearte_header.html' %}
+<br><br><br><br><br><br>
+
+<div class="container">
+    <div class="row">
+        {% for booking in bookings %}
+        <div class="col-md-4 mb-3">
+            <div class="card border-primary shadow">
+                <div class="card-body">
+                    <h5 class="card-title">{{ booking.film.film_name }}</h5>
+                    <p class="card-text"><strong>Filmmaker:</strong> {{ booking.fimmaker.name }}</p>
+                    <p class="card-text"><strong>Email:</strong> {{ booking.fimmaker.email }}</p>
+                    <p class="card-text"><strong>Phone:</strong> {{ booking.fimmaker.phone }}</p>
+                    <p class="card-text"><strong>Booking Date:</strong> {{ booking.date }}</p>
+                    <p class="card-text"><strong>Status:</strong> <span id="status-{{ booking.Booktheater_id }}">{{ booking.status }}</span></p>
+                    
+                    <!-- Button to update the status -->
+                     <a href="/approve_booking_request/{{booking.Booktheater_id}}">accept</a>
+                     <a href="/reject_booking_request/{{booking.Booktheater_id}}">reject</a>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12">
+            <p>No booking requests found.</p>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+
+
+{% include 'footer.html' %}

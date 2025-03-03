@@ -111,6 +111,14 @@ def theatre_manage_seats(request,slot_id,theater_id):
         return HttpResponse("<script>alert('Added Successfully');window.location='/thearte_registration';</script>")
     return render(request,'theatre_manage_seats.html',{'st':st})
 
+def update_availability(request,id):
+    ts=TheaterSeat.objects.get(seat_id=id)
+    ts.status = 'available'
+    ts.save()
+    return HttpResponse("<script>alert('updated availability');window.location='/thearte_registration';</script>")
+
+
+
 
 def theatre_manage_slots(request,id):
     flm=film.objects.all()
@@ -167,6 +175,7 @@ def theatre_view_payment_details(request,id):
 
 def theatre_view_producers(request):
     pro=Filmmaker.objects.all()
+    # req = BookTheaters.objects.get(theater_id=request.session['login_id'])
     return render(request,'theatre_view_producers.html',{'pro':pro})
 
 
@@ -225,3 +234,26 @@ def theatre_insert_theatrechat(request, msg):
         # Log the error and return an error response
         print(f"Error inserting chat message: {e}")
         return JsonResponse({'status': 'error', 'message': str(e)})
+    
+def theater_view_book_requests(request,theater_id):
+    bookings = BookTheaters.objects.filter(theater_id=theater_id).select_related('film', 'fimmaker')
+
+    return render(request,"theater_view_book_requests.html", {"bookings": bookings})
+
+from django.shortcuts import get_object_or_404
+from django.http import HttpResponse
+# from .models import BookTheaters
+
+def approve_booking_request(request, Booktheater_id):
+    booking = get_object_or_404(BookTheaters, pk=Booktheater_id)
+    booking.status = "Approved"
+    booking.save()
+    
+    return HttpResponse("<script>alert('Approved Successfully');window.location='/thearte_registration';</script>")
+
+def reject_booking_request(request, Booktheater_id):
+    booking = get_object_or_404(BookTheaters, pk=Booktheater_id)
+    booking.status = "Rejected"
+    booking.save()
+    
+    return HttpResponse("<script>alert('Rejected Successfully');window.location='/thearte_registration';</script>")

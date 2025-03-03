@@ -17,7 +17,7 @@ urlpatterns = [
     path('filmaker_reg/', views.filmaker_reg, name='filmaker_reg'),
     path('filmaker_home/', views.filmaker_home, name='filmaker_home'),
     path('filmmaker_view_prof', views.filmmaker_view_prof, name='filmmaker_view_prof'),
-    path('film_maker_view_theaters', views.film_maker_view_theaters, name='film_maker_view_theaters'),
+    path('film_maker_view_theaters/<int:film_id>/', views.film_maker_view_theaters, name='film_maker_view_theaters'),
     path('film_maker_book_seats/<theater_id>/<screening_slot_id>',views.film_maker_book_seats,name='film_maker_book_seats'),
     path('film_maker_seat_confirm/', views.film_maker_seat_confirm, name='film_maker_seat_confirm'),
     path('film_maker_view_campaigns/', views.film_maker_view_campaigns, name='film_maker_view_campaigns'),
@@ -28,8 +28,10 @@ urlpatterns = [
     path('film_maker_view_tickets', views.film_maker_view_tickets, name='film_maker_view_tickets'),
     path('film_maker_view_producermsg', views.film_maker_view_producermsg, name='film_maker_view_producermsg'),
     path('film_maker_view_films', views.film_maker_view_films, name='film_maker_view_films'),
+    path('film_maker_view_theater_book_status', views.film_maker_view_theater_book_status, name='film_maker_view_theater_book_status'),
     path('film_maker_add_promotion_materials/<film_id>', views.film_maker_add_promotion_materials, name='film_maker_add_promotion_materials'),
     path('delete_promo_materials/<int:promo_id>/', views.delete_promo_materials, name='delete_promo_materials'),
+    path('film_maker_book_theater/<theater_id>/<int:film_id>/', views.film_maker_book_theater, name='film_maker_book_theater'),
 
     #####################content manager#####################
     path('content_manager_reg', views.content_manager_reg, name='content_manager_reg'),

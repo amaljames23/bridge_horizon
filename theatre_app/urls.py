@@ -10,6 +10,7 @@ urlpatterns = [
     path('thearter_owner_update_profile/<lid>',views.thearter_owner_update_profile,name='thearter_owner_update_profile'),
     path('theatre_view_others_theartes',views.theatre_view_others_theartes,name='theatre_view_others_theartes'),
     path('theatre_manage_seats/<slot_id>/<theater_id>',views.theatre_manage_seats,name='theatre_manage_seats'),
+    path('update_availability/<id>',views.update_availability,name='update_availability'),
     path('theatre_manage_slots/<id>',views.theatre_manage_slots,name='theatre_manage_slots'),
     path('theatre_update_slots/<id>',views.theatre_update_slots,name='theatre_update_slots'),
     path('theatre_delete_slots/<id>',views.theatre_delete_slots,name='theatre_delete_slots'),
@@ -19,5 +20,8 @@ urlpatterns = [
     path('theatre_chat/<id>',views.theatre_chat,name='theatre_chat'),
     path('theatre_view_producermsg',views.theatre_view_producermsg,name='theatre_view_producermsg'),
      path('theatre_insert_theatrechat/<msg>',views.theatre_insert_theatrechat,name='theatre_insert_theatrechat'),
+     path('theater_view_book_requests/<theater_id>',views.theater_view_book_requests,name='theater_view_book_requests'),
+     path('approve_booking_request/<Booktheater_id>',views.approve_booking_request,name='approve_booking_request'),
+     path('reject_booking_request/<Booktheater_id>',views.reject_booking_request,name='reject_booking_request'),
 
 ]

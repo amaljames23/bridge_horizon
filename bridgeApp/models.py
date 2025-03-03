@@ -158,3 +158,12 @@ class chat(models.Model):
     toid=models.CharField(max_length=225)
     date=models.CharField(max_length=225)
     message=models.CharField(max_length=225)
+
+
+class BookTheaters(models.Model):
+    Booktheater_id = models.AutoField(primary_key=True)
+    film = models.ForeignKey(film, on_delete=models.CASCADE) 
+    theater = models.ForeignKey(Theater, on_delete=models.CASCADE) 
+    date=models.CharField(max_length=225)
+    fimmaker = models.ForeignKey('Filmmaker', on_delete=models.CASCADE)
+    status = models.CharField(max_length=225)

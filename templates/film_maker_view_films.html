@@ -4,6 +4,42 @@
 
 
 <div class="container mt-5">
+    <div class="form-container">
+      <h2 class="text-center mb-4">Add New Film</h2>
+      <form method="POST" enctype="multipart/form-data">
+        <div class="mb-3">
+          <label class="form-label">Film Name</label>
+          <input type="text" name="film" class="form-control" required />
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Details</label>
+          <input type="text" name="deat" class="form-control" required />
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Image</label>
+          <input type="file" name="photo" class="form-control" required />
+        </div>
+        <!-- <div class="mb-3">
+          <label class="form-label">Film makers</label>
+          <select name="film_maker_id" id="" class="form-control">
+            {% for i in f_m %}
+            <option value="{{ i.filmmaker_id }}">{{ i.name }}</option>
+            {% endfor %}
+          </select>
+        </div> -->
+        <div class="mb-3">
+          <label class="form-label">Release Date</label>
+          <input type="date" name="redate" class="form-control" required />
+        </div>
+        <div class="text-center">
+          <button type="submit" class="btn btn-primary">Add Film</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+
+<div class="container mt-5">
     <h3 class="text-center mb-4">Approved Films</h3>
     <div class="row">
         {% for film in films %}
@@ -14,7 +50,11 @@
                     <h5 class="card-title">{{ film.film_name }}</h5>
                     <p class="card-text">{{ film.deatils }}</p>
                     <p class="card-text"><small class="text-muted">Release Date: {{ film.date }}</small></p>
-                    <a href="/film_maker_add_promotion_materials/{{ film.filmid }}" class="btn btn-primary w-100">Add promotion materials</a>
+                    <a href="/admin_delete_films/{{ film.filmid }}" class="btn btn-danger  w-100"
+                    >Delete</a
+                  >
+                    <a href="/film_maker_add_promotion_materials/{{ film.filmid }}" class="btn btn-primary w-100 mt-2">Add promotion materials</a>
+                    <a href="/film_maker_view_theaters/{{ film.filmid }}" class="btn btn-primary w-100 mt-2">Book theaters</a>
                 </div>
             </div>
         </div>

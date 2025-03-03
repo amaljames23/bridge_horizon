@@ -32,6 +32,8 @@
                     <h5 class="card-title">Seat No: {{ seat.seat_number }}</h5>
                     <p class="card-text"><strong>Type:</strong> {{ seat.seat_type }}</p>
                     <p class="card-text"><strong>SL.NO:</strong> {{ forloop.counter }}</p>
+                    <p class="card-text"><strong>availability:</strong> {{ seat.status }}</p>
+                    <a href="/update_availability/{{seat.seat_id}}">Make available</a>
                 </div>
             </div>
         </div>

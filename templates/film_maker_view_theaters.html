@@ -24,8 +24,11 @@
                                     {{ slot.status }}
                                 </span>
                             </p>
-                            <a href="film_maker_book_seats/{{ theater.theater_id }}/{{ slot.slot_id }}" class="btn btn-primary w-100">
+                            <!-- <a href="/film_maker_book_seats/{{ theater.theater_id }}/{{ slot.slot_id }}" class="btn btn-primary w-100">
                                 Book Seats
+                            </a> -->
+                            <a href="/film_maker_book_theater/{{ theater.theater_id }}/{{film_id}}" class="btn btn-primary w-100">
+                                Book Theater
                             </a>
                         </div>
                     </div>

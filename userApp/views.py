@@ -278,10 +278,35 @@ def filmmaker_view_prof(request):
     return render(request,'filmmaker_view_prof.html',{'maker':maker})
 
 
-def film_maker_view_theaters(request):  
+def film_maker_view_theaters(request,film_id):  
     theaters = Theater.objects.all()
     screening_slots = ScreeningSlot.objects.all()  
-    return render(request,'film_maker_view_theaters.html',{'theaters':theaters, 'screening_slots': screening_slots})
+    return render(request,'film_maker_view_theaters.html',{'theaters':theaters, 'screening_slots': screening_slots,'film_id':film_id})
+
+from django.shortcuts import get_object_or_404
+from django.http import HttpResponse
+# from .models import BookTheaters
+import datetime 
+def film_maker_book_theater(request, theater_id, film_id):
+    # if request.method == "POST":
+        # Get today's date in 'YYYY-MM-DD' format
+        today_date = datetime.datetime.today().strftime('%Y-%m-%d')
+
+        # Insert into BookTheaters model
+        BookTheaters.objects.create(
+            film_id=film_id,
+            theater_id=theater_id,
+            date=today_date,  # Using today's date
+            fimmaker_id=request.session['fm_id'],  # Fetch filmmaker ID from session
+            status="Pending"  # Default status
+        )
+
+        # Return JavaScript alert and redirect
+        return HttpResponse("<script>alert('Filmmaker Added Successfully');window.location='/login';</script>")
+
+    # return HttpResponse("<script>alert('Invalid Request');window.history.back();</script>")
+
+
 
 
 def film_maker_book_seats(request, theater_id, screening_slot_id):
@@ -484,7 +509,42 @@ def film_maker_view_producermsg(request):
 
 def film_maker_view_films(request):
     films=film.objects.filter(filmmaker_id=request.session['fm_id'])
+    if request.method=='POST':
+        film_name=request.POST['film']
+        details=request.POST['deat']
+        date=request.POST['redate']
+        # film_maker_id=request.POST['film_maker_id']
+
+        # fm_id = Filmmaker.objects.get(filmmaker_id=film_maker_id)
+
+        photo=request.FILES['photo']
+
+
+
+
+        fs= FileSystemStorage()
+        image=fs.save(photo.name,photo)
+
+        # try:
+        flm=film(film_name=film_name,deatils=details,photo=image,date=date,filmmaker_id=request.session['fm_id'])
+        flm.save()
+        return HttpResponse("<script>alert('Film Added Successfully');window.location='/film_maker_view_films';</script>")
+
+        # except:
+        #     return HttpResponse("<script>alert('FAILED');window.location='/admin_manage_films';</script>")
     return render(request,'film_maker_view_films.html',{'films':films})
+
+
+
+from django.shortcuts import render
+# from .models import BookTheaters
+
+def film_maker_view_theater_book_status(request):
+    filmmaker_id = request.session.get('fm_id')  # Fetch logged-in filmmaker ID
+    bookings = BookTheaters.objects.filter(fimmaker_id=filmmaker_id).select_related('film', 'theater__owner')
+
+    return render(request, "film_maker_view_theater_book_status.html", {'bookings': bookings})
+
 
 
 def film_maker_add_promotion_materials(request, film_id):
@@ -535,6 +595,10 @@ def delete_promo_materials(request, promo_id):
 
 
 import datetime
+
+
+# def film_maker_view_theaters(request,film_id):
+#     return render(request,"film_maker_view_theaters.html")
 
 
 def theatre_insert_theatrechat(request, msg):
