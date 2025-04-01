@@ -1,0 +1,121 @@
+package com.example.bridgeapp;
+
+import android.app.Activity;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+
+import com.squareup.picasso.Picasso;
+
+public class CustomViewFilms extends ArrayAdapter<String> {
+    private Activity context;
+    private String[] filmid, film_name, filmmaker, details, photo, date;
+    private double[] average_rating; // Add this field
+    SharedPreferences sh;
+    public static String filmTitleLabel,filmDescLabel,filmPosterLabel,filmDateLabel,filmRatingLabel,filmIdLabel;
+
+    // Update constructor
+    public CustomViewFilms(Activity context, String[] filmid, String[] film_name,
+                           String[] filmmaker, String[] details, String[] photo,
+                           String[] date, double[] average_rating) {
+        super(context, R.layout.activity_custom_view_films, film_name);
+        this.context = context;
+        this.filmid = filmid;
+        this.film_name = film_name;
+        this.filmmaker = filmmaker;
+        this.details = details;
+        this.photo = photo;
+        this.date = date;
+        this.average_rating = average_rating;
+    }
+
+    @Override
+    public View getView(int position, View convertView, ViewGroup parent) {
+        LayoutInflater inflater = context.getLayoutInflater();
+        View gridItem = inflater.inflate(R.layout.activity_custom_view_films, parent, false);
+
+        TextView titleView = gridItem.findViewById(R.id.tv_film_title);
+
+        TextView detailsView = gridItem.findViewById(R.id.tv_film_rating);
+        ImageView posterView = gridItem.findViewById(R.id.img_film_poster);
+
+        // Get the rating stars container
+        LinearLayout starsContainer = gridItem.findViewById(R.id.stars_container);
+
+        // Set values
+        titleView.setText(film_name[position]);
+        detailsView.setText(String.format("%.1f", average_rating[position]));
+
+        // Add stars based on rating
+        updateStarRating(starsContainer, average_rating[position]);
+
+        sh = PreferenceManager.getDefaultSharedPreferences(getContext());
+        String imagePath = "http://" + sh.getString("ip", "") + "/static/image/" + photo[position];
+        imagePath = imagePath.replace("~", "");
+
+        Picasso.with(context)
+                .load(imagePath)
+                .placeholder(R.drawable.ic_launcher_background)
+                .error(R.drawable.ic_launcher_background)
+                .into(posterView);
+
+
+        gridItem.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                filmIdLabel = filmid[position];
+                filmTitleLabel = film_name[position];
+                filmDescLabel = details[position];
+                filmPosterLabel = photo[position];
+                filmDateLabel = date[position];
+                filmRatingLabel = String.format("%.1f", average_rating[position]);
+
+
+                Intent intent = new Intent(v.getContext(), UserViewFilmMore.class);
+                v.getContext().startActivity(intent);
+            }
+        });
+
+
+        return gridItem;
+    }
+
+    private void updateStarRating(LinearLayout container, double rating) {
+        container.removeAllViews();
+        int fullStars = (int) rating;
+        boolean hasHalfStar = (rating - fullStars) >= 0.5;
+
+        // Add full stars
+        for (int i = 0; i < fullStars; i++) {
+            ImageView star = new ImageView(context);
+            star.setImageResource(android.R.drawable.btn_star_big_on);
+            star.setColorFilter(context.getResources().getColor(android.R.color.holo_orange_light));
+            container.addView(star);
+        }
+
+        // Add half star if needed
+        if (hasHalfStar) {
+            ImageView halfStar = new ImageView(context);
+            halfStar.setImageResource(android.R.drawable.btn_star_big_off);
+            halfStar.setColorFilter(context.getResources().getColor(android.R.color.holo_orange_light));
+            container.addView(halfStar);
+        }
+
+        // Add empty stars
+        int emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
+        for (int i = 0; i < emptyStars; i++) {
+            ImageView emptyStar = new ImageView(context);
+            emptyStar.setImageResource(android.R.drawable.btn_star_big_off);
+            emptyStar.setColorFilter(context.getResources().getColor(android.R.color.darker_gray));
+            container.addView(emptyStar);
+        }
+    }
+}
+

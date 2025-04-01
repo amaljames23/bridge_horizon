@@ -1,0 +1,89 @@
+package com.example.bridgeapp;
+
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.RatingBar;
+import android.widget.TextView;
+
+import androidx.activity.EdgeToEdge;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
+
+import com.squareup.picasso.Picasso;
+
+public class UserViewFilmMore extends AppCompatActivity {
+    ImageView filmPoster;
+    TextView filmTitle,filmReleaseDate,filmDescription,filmRatingValue;
+    SharedPreferences sh;
+    RatingBar filmRating;
+    Button theaterBtn,ratingBtn;
+
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        EdgeToEdge.enable(this);
+        setContentView(R.layout.activity_user_view_film_more);
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
+            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+            return insets;
+        });
+
+        filmPoster=findViewById(R.id.img_film_poster);
+        filmTitle=findViewById(R.id.tv_film_title);
+        filmReleaseDate=findViewById(R.id.tv_release_date);
+        filmDescription=findViewById(R.id.tv_film_description);
+        filmRatingValue=findViewById(R.id.tv_rating_value);
+        filmRating=findViewById(R.id.rating_bar);
+        theaterBtn=findViewById(R.id.theater_btn);
+        ratingBtn=findViewById(R.id.rate_btn);
+
+        ratingBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(),UserAddRating.class));
+            }
+        });
+
+        theaterBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(),UserViewTheaters.class));
+            }
+        });
+
+        sh = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        String imagePath = "http://" + sh.getString("ip", "") + "/static/image/" + CustomViewFilms.filmPosterLabel;
+        imagePath = imagePath.replace("~", "");
+
+        Picasso.with(getApplicationContext())
+                .load(imagePath)
+                .placeholder(R.drawable.ic_launcher_background)
+                .error(R.drawable.ic_launcher_background)
+                .into(filmPoster);
+
+        filmTitle.setText(CustomViewFilms.filmTitleLabel);
+        filmReleaseDate.setText(CustomViewFilms.filmDateLabel);
+        filmDescription.setText(CustomViewFilms.filmDescLabel);
+
+        float rate = Float.parseFloat(CustomViewFilms.filmRatingLabel);
+
+
+        filmRatingValue.setText(rate + "/5");
+
+        float rating = Float.parseFloat(CustomViewFilms.filmRatingLabel);
+        filmRating.setRating(rating);
+
+
+
+
+    }
+}
