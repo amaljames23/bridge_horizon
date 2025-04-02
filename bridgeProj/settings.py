@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-z+x*q0f0v-ra@3h&ovh2n-y*r2)odw2!&e@36^5^bx4*$3s0%j
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -80,7 +80,7 @@ WSGI_APPLICATION = 'bridgeProj.wsgi.application'
 DATABASES = {
      "default": {
         "ENGINE": "django.db.backends.mysql",
-        'NAME': 'bridgedb',
+        'NAME': 'bridgedbUP',
         'USER': 'root',
         'PASSWORD': '',
         'HOST': 'localhost',  # Set to 'localhost' or '127.0.0.1' for local development
@@ -124,8 +124,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
 STATIC_URL = '/static/'
-
-STATICFILES_DIRS=[BASE_DIR,'static/']
+STATICFILES_DIRS = [BASE_DIR/"static",]
+                    
 MEDIA_ROOT=os.path.join(BASE_DIR,'static/image')
 
 # Default primary key field type

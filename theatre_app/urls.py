@@ -19,9 +19,10 @@ urlpatterns = [
     path('theatre_view_producers',views.theatre_view_producers,name='theatre_view_producers'),
     path('theatre_chat/<id>',views.theatre_chat,name='theatre_chat'),
     path('theatre_view_producermsg',views.theatre_view_producermsg,name='theatre_view_producermsg'),
-     path('theatre_insert_theatrechat/<msg>',views.theatre_insert_theatrechat,name='theatre_insert_theatrechat'),
-     path('theater_view_book_requests/<theater_id>',views.theater_view_book_requests,name='theater_view_book_requests'),
-     path('approve_booking_request/<Booktheater_id>',views.approve_booking_request,name='approve_booking_request'),
-     path('reject_booking_request/<Booktheater_id>',views.reject_booking_request,name='reject_booking_request'),
+    path('theatre_insert_theatrechat/<msg>',views.theatre_insert_theatrechat,name='theatre_insert_theatrechat'),
+    path('theater_view_book_requests/<theater_id>',views.theater_view_book_requests,name='theater_view_book_requests'),
+    path('approve_booking_request/<Booktheater_id>',views.approve_booking_request,name='approve_booking_request'),
+    path('reject_booking_request/<Booktheater_id>',views.reject_booking_request,name='reject_booking_request'),
+    path('admin_send_notification',views.admin_send_notification,name='admin_send_notification'),
 
 ]

@@ -16,16 +16,16 @@
     }
 </style>
 
-
+<br><br><br><br><br><br><br><br>
 <div class="container">
-    <h2 class="text-center my-4">Content Managers</h2>
+    <h2 class="text-center my-4" style="color: black;">Content Managers</h2>
     <div class="card-container">
         {% for i in cm %}
         <div class="card shadow-sm">
             <div class="card-body">
-                <h5 class="card-title">{{ i.name }}</h5>
-                <p class="card-text"><strong>Email:</strong> {{ i.email }}</p>
-                <p class="card-text"><strong>Phone:</strong> {{ i.phone }}</p>
+                <h5 class="card-title" style="color: black;">{{ i.name }}</h5>
+                <p class="card-text" style="color: black;"><strong>Email:</strong> {{ i.email }}</p>
+                <p class="card-text" style="color: black;"><strong>Phone:</strong> {{ i.phone }}</p>
                 <div class="d-flex justify-content-between">
                     <a href="/accept_content_manager/{{ i.login_id }}" class="btn btn-success">Accept</a>
                     <a href="/reject_content_manager/{{ i.login_id }}" class="btn btn-danger">Reject</a>

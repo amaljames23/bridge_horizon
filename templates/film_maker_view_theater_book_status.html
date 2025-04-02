@@ -28,6 +28,10 @@
                     {% if booking.status == "Pending" %}
                     <a href="/cancel_booking/{{ booking.Booktheater_id }}" class="btn btn-danger">Cancel Request</a>
                     {% endif %}
+
+                    {% if booking.status == "Approved" %}
+                    <a href="/make_payment_for_therate_booking/{{ booking.Booktheater_id }}" class="btn btn-danger">Make Payment</a>
+                    {% endif %}
                 </div>
             </div>
         </div>

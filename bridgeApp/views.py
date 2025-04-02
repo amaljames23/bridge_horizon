@@ -98,7 +98,7 @@ def reject_user(request,aid):
     return HttpResponse("<script>alert('Reject Successfully');window.location='/admin_manage_users';</script>")
 
 def admin_view_compalints(request):
-    comp=complaint.objects.all()
+    comp = complaint.objects.select_related('senderid').all()
     return render(request,'admin_view_compalints.html',{'comp':comp})
 
 
@@ -206,6 +206,10 @@ def admin_view_theaters(request):
     th=TheaterOwner.objects.all()
     return render(request,'admin_view_theaters.html',{'th':th})
 
+
+def admin_view_content_managers(request):
+    cm=ContentManager.objects.all()
+    return render(request,'admin_view_content_manager.html',{'cm':cm})
 
 def accept_theaterowner(request,lid):
     aud=Login.objects.get(login_id=lid)

@@ -21,55 +21,91 @@
             padding: 24px;
         }
 
-        .login-container {
+        .main-container {
+            display: flex;
             width: 100%;
-            max-width: 440px;
+            max-width: 900px;
             background: white;
             border-radius: 16px;
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-            padding: 32px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            overflow: hidden;
             transition: transform 0.3s ease;
         }
 
-        .login-container:hover {
-            transform: scale(1.02);
+        .main-container:hover {
+            transform: translateY(-5px);
+        }
+
+        .login-container {
+            width: 50%;
+            padding: 48px 40px;
+        }
+
+        .image-container {
+            width: 50%;
+            background: url("/static/OXYKQ00.jpg") center/cover;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 40px;
+            color: white;
+            position: relative;
+        }
+
+        .image-overlay-text {
+            z-index: 2;
+            text-align: center;
+        }
+
+        .image-overlay-text h2 {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 16px;
+        }
+
+        .image-overlay-text p {
+            font-size: 16px;
+            line-height: 1.6;
+            opacity: 0.9;
+            margin-bottom: 24px;
         }
 
         .header {
             text-align: center;
-            margin-bottom: 32px;
+            margin-bottom: 40px;
         }
 
         .header h1 {
             color: #1f2937;
-            font-size: 24px;
+            font-size: 28px;
             font-weight: 700;
-            margin-bottom: 8px;
+            margin-bottom: 12px;
         }
 
         .header p {
             color: #6b7280;
-            font-size: 14px;
+            font-size: 16px;
         }
 
         .form-group {
-            margin-bottom: 24px;
+            margin-bottom: 28px;
         }
 
         .form-group label {
             display: block;
-            margin-bottom: 8px;
+            margin-bottom: 10px;
             color: #374151;
-            font-size: 14px;
+            font-size: 15px;
             font-weight: 500;
         }
 
         .form-group input {
             width: 100%;
-            padding: 12px 16px;
+            padding: 14px 18px;
             border: 1px solid #d1d5db;
-            border-radius: 8px;
-            font-size: 14px;
+            border-radius: 10px;
+            font-size: 15px;
             background-color: #f9fafb;
             transition: all 0.2s ease;
         }
@@ -81,7 +117,7 @@
         .form-group input:focus {
             outline: none;
             border-color: #4f46e5;
-            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+            box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.15);
             background-color: white;
         }
 
@@ -89,19 +125,19 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 24px;
-            font-size: 14px;
+            margin-bottom: 32px;
+            font-size: 15px;
         }
 
         .remember-me {
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 10px;
         }
 
         .remember-me input[type="checkbox"] {
-            width: 16px;
-            height: 16px;
+            width: 18px;
+            height: 18px;
             accent-color: #4f46e5;
         }
 
@@ -114,72 +150,191 @@
 
         .forgot-password:hover {
             color: #4338ca;
+            text-decoration: underline;
         }
 
         .submit-btn {
             width: 100%;
-            padding: 12px 24px;
+            padding: 14px 24px;
             background-color: #4f46e5;
             color: white;
             border: none;
-            border-radius: 8px;
-            font-size: 14px;
+            border-radius: 10px;
+            font-size: 16px;
             font-weight: 600;
             cursor: pointer;
-            transition: background-color 0.2s ease;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px -1px rgba(79, 70, 229, 0.2);
         }
 
         .submit-btn:hover {
             background-color: #4338ca;
+            box-shadow: 0 6px 10px -1px rgba(79, 70, 229, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .submit-btn:active {
+            transform: translateY(0);
         }
 
         .home-link {
             display: block;
             text-align: center;
-            margin-top: 24px;
+            margin-top: 32px;
             color: #4f46e5;
             text-decoration: none;
-            font-size: 14px;
+            font-size: 15px;
             font-weight: 500;
             transition: color 0.2s ease;
         }
 
         .home-link:hover {
             color: #4338ca;
+            text-decoration: underline;
         }
 
-        @media (max-width: 480px) {
+        .sign-up-link {
+            display: block;
+            text-align: center;
+            margin-top: 24px;
+            font-size: 15px;
+            color: #6b7280;
+        }
+
+        .sign-up-link a {
+            color: #4f46e5;
+            text-decoration: none;
+            font-weight: 500;
+            margin-left: 4px;
+            transition: color 0.2s ease;
+        }
+
+        .sign-up-link a:hover {
+            color: #4338ca;
+            text-decoration: underline;
+        }
+
+        .social-login {
+            margin-top: 32px;
+            text-align: center;
+        }
+
+        .social-login p {
+            color: #6b7280;
+            font-size: 14px;
+            margin-bottom: 16px;
+            position: relative;
+        }
+
+        .social-login p::before,
+        .social-login p::after {
+            content: "";
+            display: inline-block;
+            width: 30%;
+            height: 1px;
+            background-color: #e5e7eb;
+            position: relative;
+            vertical-align: middle;
+        }
+
+        .social-login p::before {
+            right: 15px;
+            margin-left: -30%;
+        }
+
+        .social-login p::after {
+            left: 15px;
+            margin-right: -30%;
+        }
+
+        .social-icons {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+        }
+
+        .social-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #f3f4f6;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .social-icon:hover {
+            background-color: #e5e7eb;
+            transform: translateY(-3px);
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .main-container {
+                flex-direction: column;
+                max-width: 440px;
+            }
+
+            .login-container,
+            .image-container {
+                width: 100%;
+            }
+
+            .image-container {
+                min-height: 200px;
+                order: -1;
+                padding: 30px;
+            }
+
             .login-container {
-                padding: 24px;
+                padding: 32px 24px;
             }
         }
     </style>
 </head>
 <body>
-    <div class="login-container">
-        <div class="header">
-            <h1>Welcome Back</h1>
-            <p>Please sign in to continue</p>
-        </div>
-        <form action="" method="post">
-            <div class="form-group">
-                <label for="username">Username</label>
-                <input type="text" id="username" name="uname" placeholder="Enter your username" required>
+    <div class="main-container">
+        <div class="login-container">
+            <div class="header">
+                <h1>Welcome Back</h1>
+                <p>Please sign in to continue</p>
             </div>
-            <div class="form-group">
-                <label for="password">Password</label>
-                <input type="password" id="password" name="pass" placeholder="Enter your password" required>
-            </div>
-            <div class="remember-forgot">
-                <div class="remember-me">
-                    <input type="checkbox" id="remember">
-                    <label for="remember">Remember me</label>
+            <form action="" method="post">
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" name="uname" placeholder="Enter your username" required>
                 </div>
-                <!-- <a href="#" class="forgot-password">Forgot password?</a> -->
-            </div>
-            <button type="submit" class="submit-btn">Sign In</button>
-            <a href="/" class="home-link">← Back to Home</a>
-        </form>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="pass" placeholder="Enter your password" required>
+                </div>
+                <div class="remember-forgot">
+                    <div class="remember-me">
+                        <input type="checkbox" id="remember">
+                        <label for="remember">Remember me</label>
+                    </div>
+                    <a href="#" class="forgot-password">Forgot password?</a>
+                </div>
+                <button type="submit" class="submit-btn">Sign In</button>
+                <div class="sign-up-link">
+                    Don't have an account?<a href="#">Sign up</a>
+                </div>
+                <div class="social-login">
+                    <p>Or continue with</p>
+                    <div class="social-icons">
+                        <div class="social-icon">G</div>
+                        <div class="social-icon">f</div>
+                        <div class="social-icon">in</div>
+                    </div>
+                </div>
+                <a href="/" class="home-link">← Back to Home</a>
+            </form>
+        </div>
+        <div class="image-container">
+       
+        </div>
     </div>
 </body>
 </html>

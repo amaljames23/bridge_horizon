@@ -18,6 +18,7 @@ urlpatterns = [
     path('admin_send_notification',views.admin_send_notification,name='admin_send_notification'),
     path('admin_view_producers',views.admin_view_producers,name='admin_view_producers'),
     path('admin_view_theaters',views.admin_view_theaters,name='admin_view_theaters'),
+    path('admin_view_content_managers',views.admin_view_content_managers,name='admin_view_content_managers'),
     path('accept_theaterowner/<lid>',views.accept_theaterowner,name='accept_theaterowner'),
     path('reject_theaterowner/<lid>',views.reject_theaterowner,name='reject_theaterowner'),
 

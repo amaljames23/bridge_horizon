@@ -302,7 +302,7 @@ def film_maker_book_theater(request, theater_id, film_id):
         )
 
         # Return JavaScript alert and redirect
-        return HttpResponse("<script>alert('Filmmaker Added Successfully');window.location='/login';</script>")
+        return HttpResponse("<script>alert('Booked Successfully');window.location='/filmaker_home';</script>")
 
     # return HttpResponse("<script>alert('Invalid Request');window.history.back();</script>")
 
@@ -502,9 +502,12 @@ def film_maker_view_producermsg(request):
         a.append({"chat_id":i.chatid,"from_id":i.fromid,"message":i.message,"date_time":i.date})
     p=TheaterOwner.objects.get(login_id=request.session["owner_id"])
     print(chat_messages,p.name)
+    prof = p.license_photo
+    print(prof,"YYYYYYYYYYYYYYYYY")
     first_name=p.name+" "
     print(a)
-    return JsonResponse({'data':a,'first_name':first_name,'photo':"/static/image/chat_profile.jpg"})
+    # return JsonResponse({'data':a,'first_name':first_name,'photo':"/static/image/chat_profile.jpg"})
+    return JsonResponse({'data':a,'first_name':first_name,'photo':f"/static/image/{prof}"})
 
 
 def film_maker_view_films(request):
@@ -544,6 +547,17 @@ def film_maker_view_theater_book_status(request):
     bookings = BookTheaters.objects.filter(fimmaker_id=filmmaker_id).select_related('film', 'theater__owner')
 
     return render(request, "film_maker_view_theater_book_status.html", {'bookings': bookings})
+
+def make_payment_for_therate_booking(request,theater_id):
+    bookings = BookTheaters.objects.get(Booktheater_id=theater_id)
+
+    if request.method == 'POST':
+        bookings.status = "Paid"
+        bookings.save()
+        return HttpResponse("<script>alert('Pay  Successfully');window.location='/filmaker_home';</script>")
+
+  
+    return render(request, "make_payment_for_therate_booking.html",)
 
 
 
@@ -857,3 +871,655 @@ def reject_promo_material(request, promo_id):
     promo.status = "Rejected"
     promo.save()
     return HttpResponse("<script>alert('Promotion Material Rejected Successfully');window.location='/conter_manager_view_films_to_make_campaign';</script>")
+
+
+
+####################User App#######################
+def user_app_login(request):
+    data = []
+    username = request.GET.get('username')
+    password = request.GET.get('password')
+
+    try:
+        print(f"Received username: {username}, password: {password}")
+
+        # Fetch all records from the login table
+        queryset = Login.objects.filter(username=username, password=password)
+
+        print(f"Queryset count: {queryset.count()}")
+
+        login_data = queryset.values('login_id', 'usertype').first()
+        print(f"Fetched login data: {login_data}")
+
+        if not login_data:
+            return JsonResponse({'status': 'error', 'message': 'Invalid username or password'})
+
+        if login_data['usertype'] == 'user':
+            queryset2 = Audience.objects.filter(login_id=login_data['login_id']).values('audience_id')
+            data = [{"user_id": u['audience_id'], "usertype": login_data['usertype'], "login_id": login_data['login_id']} for u in queryset2]
+
+        status = "success" if data else "error"
+
+    except Exception as e:
+        status = "error"
+        print(f"Error: {e}")
+
+    response = {'status': status, 'user': data}
+    print(response,"*********************")
+    
+    return JsonResponse(response)
+
+
+def user_app_signup(request):
+    data=[]
+    name=request.GET.get('name')
+    phone=request.GET.get('phone')
+    email=request.GET.get('email')
+    preferences=request.GET.get('preferences')
+    username=request.GET.get('username')
+    password=request.GET.get('password')
+
+    try:
+        x=Login(username=username,password=password,usertype='user')
+        x.save()
+
+        a=Audience(name=name,phone=phone,email=email,preferences=preferences,login=x)
+        a.save()
+        status="success"
+
+    except Exception as e:
+        status="error"
+
+    response={
+        'status':status
+    }
+
+    return JsonResponse(response)
+
+
+from django.db.models import Avg
+from django.http import JsonResponse
+import traceback
+
+def user_app_view_films(request):
+    data = []
+    try:
+        films = film.objects.all()
+        for f in films:
+            # Calculate average rating (Convert to float, handle missing ratings)
+            avg_rating = Review.objects.filter(film=f).aggregate(avg_rating=Avg('rating'))['avg_rating']
+            avg_rating = round(float(avg_rating), 1) if avg_rating is not None else 0.0
+
+            data.append({
+                'filmid': f.filmid,
+                'film_name': f.film_name,
+                'filmmaker': f.filmmaker_id if f.filmmaker else None,  
+                'details': f.deatils,  
+                'photo': f.photo,  
+                'date': f.date,
+                'average_rating': avg_rating  # New field added
+            })
+        status = "success"
+    except Exception as e:
+        print("Error occurred in user_app_view_films:")
+        traceback.print_exc()
+        status = "error"
+
+    response = {
+        'status': status,
+        'films': data,
+        'method': 'films'
+    }
+
+    print(response, "FILM DATA")
+    return JsonResponse(response)
+
+
+from django.db.models import Q, Avg
+from django.http import JsonResponse
+import traceback
+
+def user_app_search_films(request):
+    search = request.GET.get('q', '').strip()  # Get search query, handle empty input
+    data = []
+
+    try:
+        # Filter films where the search text is in the film name (case-insensitive)
+        films = film.objects.filter(Q(film_name__icontains=search))
+
+        for f in films:
+            # Calculate average rating (Convert to float, handle missing ratings)
+            avg_rating = Review.objects.filter(film=f).aggregate(avg_rating=Avg('rating'))['avg_rating']
+            avg_rating = round(float(avg_rating), 1) if avg_rating is not None else 0.0
+
+            data.append({
+                'filmid': f.filmid,
+                'film_name': f.film_name,
+                'filmmaker': f.filmmaker_id if f.filmmaker else None,  
+                'details': f.deatils,  
+                'photo': f.photo,  
+                'date': f.date,
+                'average_rating': avg_rating  # New field added
+            })
+
+        status = "success" if data else "failed"
+
+    except Exception as e:
+        print("Error occurred in user_app_search_films:")
+        traceback.print_exc()
+        status = "error"
+
+    response = {
+        'status': status,
+        'films': data,
+        'method': 'films'
+    }
+
+    print(response, "SEARCH FILM DATA")
+    return JsonResponse(response)
+
+
+def user_app_send_complaint(request):
+    title = request.GET.get('title')
+    description = request.GET.get('description')
+    login_id = request.GET.get('login_id')
+
+
+    try:
+        res = complaint(
+            complaint=title,
+            reply='pending',
+            date=date.today(),
+            senderid=Login.objects.get(login_id=login_id)        )
+        res.save()
+        status = "success"  
+
+    except Exception as e:
+        status = "error"
+        print(f"Error: {e}")
+
+    response = {
+        'status': status,
+        'method': 'send'
+    }
+
+    return JsonResponse(response)
+
+
+def user_view_app_complaint(request):
+    login_id = request.GET.get('login_id')
+    data=[]
+
+    try:
+        res = complaint.objects.filter(senderid=Login.objects.get(login_id=login_id))
+        for i in res:
+            data.append({'complaint_id':i.complaintid,'title':i.complaint,'reply':i.reply,'date':i.date})
+        status = "success"
+
+    except Exception as e:
+        status = "error"
+        print(f"Error: {e}")
+
+    response = {
+        'status': status,
+        'view': data,
+        'method': 'display'
+    }
+    print(response,"^^^^^^^^^^^")
+
+    return JsonResponse(response)
+
+
+from django.shortcuts import render
+from django.http import JsonResponse
+from collections import defaultdict
+# from .models import ScreeningSlot, Theater
+
+def user_app_view_theaters(request):
+    data = []
+    film_id = request.GET.get('film_id')
+    date = request.GET.get('date')
+
+    if not film_id or not date:
+        return JsonResponse({'error': 'film_id and date are required'}, status=400)
+
+    # Fetch screening slots for the given film_id and date
+    slots = ScreeningSlot.objects.filter(film_id=film_id, date=date).select_related('theater')
+
+    # Dictionary to group slots by theater
+    theater_slots = defaultdict(list)
+
+    for slot in slots:
+        theater_slots[slot.theater].append({
+            'slot_id': slot.slot_id,
+            'start_time': slot.start_time.strftime('%H:%M:%S'),
+            'status': slot.status,
+            'film_id': slot.film_id  # Include film_id in slot details
+        })
+
+    # Construct response
+    for theater, slot_details in theater_slots.items():
+        data.append({
+            'theater_id': theater.theater_id,
+            'name': theater.name,
+            'location': theater.location,
+            'capacity': theater.capacity,
+            'contact_email': theater.contact_email,
+            'contact_phone': theater.contact_phone,
+            'slots': slot_details  # Now includes film_id
+        })
+
+    response = {
+        'status': 'success',
+        'theaters': data
+    }
+
+    print(response,"MMMMMMMMMMMMMMM")
+
+    return JsonResponse(response)
+
+from django.http import JsonResponse
+# from .models import TheaterSeat
+
+def user_app_view_seats_to_book(request):
+    slot_id = request.GET.get('slot_id')
+
+    if not slot_id:
+        response={"status": "failed"}
+        return JsonResponse(response)
+
+    try:
+        seats = TheaterSeat.objects.filter(slot_id=slot_id).values(
+            'seat_id', 'seat_number', 'seat_type', 'status', 'slot_id'
+        )
+        response={"status": "success", "seats": list(seats)}
+        print(response,"<<<<<<<<<<<<<<<<<<<<<<<<")
+        return JsonResponse(response)
+    
+    except Exception as e:
+        response={"status": "failed"}
+        return JsonResponse(response)
+
+# from django.http import JsonResponse
+# from django.utils.timezone import now
+
+# def user_app_seat_booking(request):
+#     seat_ids = request.GET.get('seat_ids')  # Get seat_ids as a string
+#     user_id = request.GET.get('user_id')
+#     slot_id = request.GET.get('slot_id')
+#     theater_id = request.GET.get('theater_id')
+#     film_id = request.GET.get('film_id')
+
+#     if not seat_ids or not user_id or not slot_id or not film_id:
+#         return JsonResponse({"status": "failed", "message": "Missing required parameters"})
+
+#     # Convert seat_ids string to a list
+#     seat_id_list = seat_ids.split(',')
+
+#     # Fetch related objects
+#     try:
+#         slot = ScreeningSlot.objects.get(slot_id=slot_id)
+#         filmObj = film.objects.get(filmid=film_id)
+#         audience = Audience.objects.get(audience_id=user_id)  # Assuming user_id belongs to Audience
+#     except (ScreeningSlot.DoesNotExist, film.DoesNotExist, Audience.DoesNotExist):
+#         return JsonResponse({"status": "failed", "message": "Invalid slot, film, or user ID"})
+
+#     # Insert records into SeatBooking model
+#     for seat_id in seat_id_list:
+#         try:
+#             seat = TheaterSeat.objects.get(seat_id=seat_id)
+#             SeatBooking.objects.create(
+#                 slot=slot,
+#                 seat=seat,
+#                 audience=audience,
+#                 filmmaker=None,  # If filmmaker is not involved, set to None
+#                 payment_status="paid",  # Adjust based on logic
+#                 film=filmObj,
+#                 booking_date=now()
+#             )
+#         except TheaterSeat.DoesNotExist:
+#             return JsonResponse({"status": "failed", "message": f"Seat ID {seat_id} does not exist"})
+
+#     return JsonResponse({"status": "success", "seat_ids": seat_id_list})
+
+
+# from django.http import JsonResponse
+# from django.utils.timezone import now
+# from django.db import transaction
+
+# def user_app_seat_booking(request):
+#     seat_ids = request.GET.get('seat_ids')  # Get seat_ids as a string
+#     user_id = request.GET.get('user_id')
+#     slot_id = request.GET.get('slot_id')
+#     theater_id = request.GET.get('theater_id')
+#     film_id = request.GET.get('film_id')
+#     tot_price = request.GET.get('tot_price')
+
+#     if not seat_ids or not user_id or not slot_id or not film_id:
+#         return JsonResponse({"status": "failed", "message": "Missing required parameters"})
+
+#     # Convert seat_ids string to a list
+#     seat_id_list = seat_ids.split(',')
+
+#     # Fetch related objects
+#     try:
+#         slot = ScreeningSlot.objects.get(slot_id=slot_id)
+#         filmObj = film.objects.get(filmid=film_id)
+#         audience = Audience.objects.get(audience_id=user_id)  # Assuming user_id belongs to Audience
+#     except (ScreeningSlot.DoesNotExist, film.DoesNotExist, Audience.DoesNotExist):
+#         return JsonResponse({"status": "failed", "message": "Invalid slot, film, or user ID"})
+
+#     # Use transaction to ensure atomic operations
+#     with transaction.atomic():
+#         for seat_id in seat_id_list:
+#             try:
+#                 seat = TheaterSeat.objects.get(seat_id=seat_id, slot=slot)
+#                 if seat.status == "booked":
+#                     return JsonResponse({"status": "failed", "message": f"Seat ID {seat_id} is already booked"})
+                
+#                 # Insert into SeatBooking
+#                 SeatBooking.objects.create(
+#                     slot=slot,
+#                     seat=seat,
+#                     audience=audience,
+#                     filmmaker=None,  # If filmmaker is not involved, set to None
+#                     payment_status="paid",  # Adjust based on logic
+#                     film=filmObj,
+#                     booking_date=now()
+#                 )
+                
+#                 # Update seat status to booked
+#                 seat.status = "booked"
+#                 seat.save()
+#             except TheaterSeat.DoesNotExist:
+#                 return JsonResponse({"status": "failed", "message": f"Seat ID {seat_id} does not exist or is not available for the given slot"})
+
+#     return JsonResponse({"status": "success", "seat_ids": seat_id_list})
+
+
+
+
+# from django.http import JsonResponse
+# from django.utils.timezone import now
+# from django.db import transaction
+
+# def user_app_seat_booking(request):
+#     seat_ids = request.GET.get('seat_ids')  # Get seat_ids as a string
+#     user_id = request.GET.get('user_id')
+#     slot_id = request.GET.get('slot_id')
+#     theater_id = request.GET.get('theater_id')
+#     film_id = request.GET.get('film_id')
+#     tot_price = request.GET.get('tot_price')
+
+#     if not seat_ids or not user_id or not slot_id or not film_id or not theater_id or not tot_price:
+#         return JsonResponse({"status": "failed", "message": "Missing required parameters"})
+
+#     # Convert seat_ids string to a list
+#     seat_id_list = seat_ids.split(',')
+
+#     # Fetch related objects
+#     try:
+#         slot = ScreeningSlot.objects.get(slot_id=slot_id)
+#         filmObj = film.objects.get(filmid=film_id)
+#         audience = Audience.objects.get(audience_id=user_id)  # Assuming user_id belongs to Audience
+#         # payer = Login.objects.get(id=user_id)  # Payer (User)
+#         # receiver = Login.objects.get(id=theater_id)  # Receiver (Theater)
+#     except (ScreeningSlot.DoesNotExist, film.DoesNotExist, Audience.DoesNotExist, Login.DoesNotExist):
+#         return JsonResponse({"status": "failed", "message": "Invalid slot, film, user, or theater ID"})
+
+#     # Use transaction to ensure atomic operations
+#     with transaction.atomic():
+#         bookings = []  # Store booked seats to associate with payment
+#         for seat_id in seat_id_list:
+#             try:
+#                 seat = TheaterSeat.objects.get(seat_id=seat_id, slot=slot)
+#                 if seat.status == "booked":
+#                     return JsonResponse({"status": "failed", "message": f"Seat ID {seat_id} is already booked"})
+
+#                 # Insert into SeatBooking
+#                 booking = SeatBooking.objects.create(
+#                     slot=slot,
+#                     seat=seat,
+#                     audience=audience,
+#                     filmmaker=None,  # If filmmaker is not involved, set to None
+#                     payment_status="paid",  # Adjust based on logic
+#                     film=filmObj,
+#                     booking_date=now()
+#                 )
+#                 bookings.append(booking)
+
+#                 # Update seat status to booked
+#                 seat.status = "booked"
+#                 seat.save()
+#             except TheaterSeat.DoesNotExist:
+#                 return JsonResponse({"status": "failed", "message": f"Seat ID {seat_id} does not exist or is not available for the given slot"})
+
+#         # Insert into Payment model
+#         Payment.objects.create(
+#             booking=bookings[0],  # Linking to the first booking (since payment covers multiple seats)
+#             payer_id=user_id,
+#             receiver_id=theater_id,
+#             amount=tot_price,
+#             transaction_date=now(),
+#             status="completed"
+#         )
+
+#     return JsonResponse({"status": "success", "seat_ids": seat_id_list})
+
+
+
+from django.http import JsonResponse
+from django.utils.timezone import now
+from django.db import transaction
+
+def user_app_seat_booking(request):
+    seat_ids = request.GET.get('seat_ids')  # Get seat_ids as a string
+    user_id = request.GET.get('user_id')
+    slot_id = request.GET.get('slot_id')
+    theater_id = request.GET.get('theater_id')
+    film_id = request.GET.get('film_id')
+    tot_price = request.GET.get('tot_price')
+
+    if not seat_ids or not user_id or not slot_id or not film_id or not theater_id or not tot_price:
+        return JsonResponse({"status": "failed", "message": "Missing required parameters"})
+
+    # Convert seat_ids string to a list
+    seat_id_list = seat_ids.split(',')
+
+    try:
+        slot = ScreeningSlot.objects.get(slot_id=slot_id)
+        filmObj = film.objects.get(filmid=film_id)
+        audience = Audience.objects.get(audience_id=user_id)
+    except (ScreeningSlot.DoesNotExist, film.DoesNotExist, Audience.DoesNotExist):
+        return JsonResponse({"status": "failed", "message": "Invalid slot, film, or user ID"})
+
+    try:
+        total_amount = float(tot_price)  # Convert total price to float
+        seat_count = len(seat_id_list)
+        per_seat_price = total_amount / seat_count  # Calculate price per seat
+    except ValueError:
+        return JsonResponse({"status": "failed", "message": "Invalid total price value"})
+
+    with transaction.atomic():
+        bookings = []  
+        for seat_id in seat_id_list:
+            try:
+                seat = TheaterSeat.objects.get(seat_id=seat_id, slot=slot)
+                if seat.status == "booked":
+                    return JsonResponse({"status": "failed", "message": f"Seat ID {seat_id} is already booked"})
+
+                booking = SeatBooking.objects.create(
+                    slot=slot,
+                    seat=seat,
+                    audience=audience,
+                    filmmaker=None,
+                    payment_status="paid",
+                    film=filmObj,
+                    booking_date=now()
+                )
+                bookings.append(booking)
+
+                # Update seat status
+                seat.status = "booked"
+                seat.save()
+            except TheaterSeat.DoesNotExist:
+                return JsonResponse({"status": "failed", "message": f"Seat ID {seat_id} does not exist or is not available for the given slot"})
+
+        # Insert separate Payment records for each SeatBooking
+        for booking in bookings:
+            Payment.objects.create(
+                booking=booking,
+                payer_id=user_id,
+                receiver_id=theater_id,
+                amount=per_seat_price,  # Assign per-seat price to each payment record
+                transaction_date=now(),
+                status="completed"
+            )
+
+    return JsonResponse({"status": "success", "seat_ids": seat_id_list})
+
+
+
+from django.http import JsonResponse
+
+def user_view_app_nots(request):
+    try:
+        # Fetch all notifications
+        notifications = notification.objects.all().values(
+            'notification_id', 'notifications', 'title', 'date'
+        )
+
+        response = {
+            "status": "success",
+            "notifications": list(notifications)
+        }
+
+        print(response,"MMMMMMMMM")
+
+        return JsonResponse(response)
+
+    except Exception as e:
+        return JsonResponse({"status": "failed", "message": str(e)})
+
+from django.http import JsonResponse
+# from .models import SeatBooking, Payment, TheaterSeat, ScreeningSlot, Film, Theater
+
+def user_view_app_bookings(request):
+    try:
+        user_id = request.GET.get('user_id')
+
+        if not user_id:
+            return JsonResponse({"status": "failed", "message": "User ID is required"})
+
+        # Fetch all bookings by the user
+        bookings = SeatBooking.objects.filter(audience_id=user_id).select_related(
+            'slot', 'seat', 'film', 'slot__theater'
+        )
+
+        booking_list = []
+
+        for booking in bookings:
+            # Fetch payment details
+            payment = Payment.objects.filter(booking=booking).first()
+            payment_status = payment.status if payment else "Not Paid"
+            amount = payment.amount if payment else 0.00
+
+            booking_list.append({
+                "booking_id": booking.booking_id,
+                "booking_date": booking.booking_date,
+                "payment_status": payment_status,
+                "amount_paid": amount,
+                "theater_name": booking.slot.theater.name,
+                "theater_location": booking.slot.theater.location,
+                "seat_number": booking.seat.seat_number,
+                "seat_type": booking.seat.seat_type,
+                "slot_start_time": booking.slot.start_time,
+                "slot_end_time": booking.slot.end_time,
+                "slot_date": booking.slot.date,
+                "film_name": booking.film.film_name if booking.film else "N/A",
+                "image": booking.film.photo if booking.film else ""
+            })
+
+        response = {
+            "status": "success",
+            "bookings": booking_list,
+            'method':'bookings'
+        }
+
+        print(response,"MMMMMMMMMm")
+
+        return JsonResponse(response, safe=False)
+
+    except Exception as e:
+        return JsonResponse({"status": "failed", "message": str(e)})
+
+from django.http import JsonResponse
+from django.utils.timezone import now
+
+def user_app_add_rating(request):
+    try:
+        user = Audience.objects.get(audience_id=request.GET.get('user_id'))
+        movie = film.objects.get(filmid=request.GET.get('film_id'))
+
+        rating_obj = Review.objects.create(
+            audience=user,
+            film=movie,
+            rating=request.GET.get('rating'),
+            review_text=request.GET.get('review'),
+            review_date=now()
+        )
+
+        return JsonResponse({"status": "success"})
+
+    except Audience.DoesNotExist:
+        return JsonResponse({"status": "failed", "message": "Invalid user ID"})
+    except film.DoesNotExist:
+        return JsonResponse({"status": "failed", "message": "Invalid film ID"})
+    except Exception as e:
+        return JsonResponse({"status": "failed", "message": str(e)})
+    
+
+
+
+from django.http import JsonResponse
+from django.db.models import Count, Avg
+import traceback
+
+def user_app_view_film_recommendations(request):
+    data = []
+    try:
+        # Get films ranked by number of bookings
+        films = film.objects.annotate(
+            booking_count=Count('screeningslot__seatbooking')
+        ).order_by('-booking_count')
+
+        for f in films:
+            # Calculate average rating (Convert to float, handle missing ratings)
+            avg_rating = Review.objects.filter(film=f).aggregate(avg_rating=Avg('rating'))['avg_rating']
+            avg_rating = round(float(avg_rating), 1) if avg_rating is not None else 0.0
+
+            data.append({
+                'filmid': f.filmid,
+                'film_name': f.film_name,
+                'filmmaker': f.filmmaker_id if f.filmmaker else None,  
+                'details': f.deatils,  
+                'photo': f.photo,  
+                'date': f.date,
+                'average_rating': avg_rating,  # New field added
+                'booking_count': f.booking_count  # New field added
+            })
+
+        status = "success"
+    except Exception as e:
+        print("Error occurred in user_app_view_film_recommendations:")
+        traceback.print_exc()
+        status = "error"
+
+    response = {
+        'status': status,
+        'films': data,
+        'method': 'film_recommendations'
+    }
+
+    print(response, "FILM RECOMMENDATION DATA")
+    return JsonResponse(response)

@@ -32,6 +32,7 @@ urlpatterns = [
     path('film_maker_add_promotion_materials/<film_id>', views.film_maker_add_promotion_materials, name='film_maker_add_promotion_materials'),
     path('delete_promo_materials/<int:promo_id>/', views.delete_promo_materials, name='delete_promo_materials'),
     path('film_maker_book_theater/<theater_id>/<int:film_id>/', views.film_maker_book_theater, name='film_maker_book_theater'),
+    path('make_payment_for_therate_booking/<theater_id>', views.make_payment_for_therate_booking, name='make_payment_for_therate_booking'),
 
     #####################content manager#####################
     path('content_manager_reg', views.content_manager_reg, name='content_manager_reg'),
@@ -44,6 +45,22 @@ urlpatterns = [
     path('content_manager_view_review&ratings/<filmid>', views.content_manager_view_reviewratings, name='content_manager_view_review&ratings'),
     path('accept_promo_material/<int:promo_id>/', views.accept_promo_material, name='accept_promo_material'),
     path('reject_promo_material/<int:promo_id>/', views.reject_promo_material, name='reject_promo_material'),
+
+
+    ##############################User App#######################
+    path('user_app_login',views.user_app_login,name="user_app_login"),
+    path('user_app_signup',views.user_app_signup,name="user_app_signup"),
+    path('user_app_view_films',views.user_app_view_films,name="user_app_view_films"),
+    path('user_app_view_theaters',views.user_app_view_theaters,name="user_app_view_theaters"),
+    path('user_app_view_seats_to_book',views.user_app_view_seats_to_book,name="user_app_view_seats_to_book"),
+    path('user_app_seat_booking',views.user_app_seat_booking,name="user_app_seat_booking"),
+    path('user_view_app_nots',views.user_view_app_nots,name="user_view_app_nots"),
+    path('user_view_app_bookings',views.user_view_app_bookings,name="user_view_app_bookings"),
+    path('user_app_add_rating',views.user_app_add_rating,name="user_app_add_rating"),
+    path('user_app_search_films',views.user_app_search_films,name="user_app_search_films"),
+    path('user_app_view_film_recommendations',views.user_app_view_film_recommendations,name="user_app_view_film_recommendations"),
+    path('user_view_app_complaint',views.user_view_app_complaint,name="user_view_app_complaint"),
+    path('user_app_send_complaint',views.user_app_send_complaint,name="user_app_send_complaint"),
     
 
 ]

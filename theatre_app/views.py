@@ -200,10 +200,11 @@ def theatre_view_producermsg(request):
     for i in chat_messages:
         a.append({"chat_id":i.chatid,"from_id":i.fromid,"message":i.message,"date_time":i.date})
     p=Filmmaker.objects.get(login_id=request.session["owner_id"])
+    prof = p.profile_image
     print(chat_messages,p.name)
     first_name=p.name+" "
     print(a)
-    return JsonResponse({'data':a,'first_name':first_name,'photo':"/static/image/chat_profile.jpg"})
+    return JsonResponse({'data':a,'first_name':first_name,'photo':"/static/image/"+prof})
 
 
 def theatre_insert_theatrechat(request, msg):
@@ -257,3 +258,20 @@ def reject_booking_request(request, Booktheater_id):
     booking.save()
     
     return HttpResponse("<script>alert('Rejected Successfully');window.location='/thearte_registration';</script>")
+
+
+
+def admin_send_notification(request):
+
+    if request.method=='POST':
+        title=request.POST['title']
+        notifications=request.POST['noti']
+        from django.utils import timezone
+        current_date = timezone.now().date()
+        print(current_date)  # Output: YYYY-MM-DD
+
+
+        noti=notification(title=title,notifications=notifications,date=current_date)
+        noti.save()
+        return HttpResponse("<script>alert('Notification Send Successfully');window.location='/theatre_home';</script>")
+    return render(request,'admin_send_notification.html')

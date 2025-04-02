@@ -1,30 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Complaint Management</title>
+    <style>
+      /* Card styling */
+      .card-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+        padding: 20px;
+        justify-content: center;
+      }
 
-{%include 'admin_header.html'%}
+      .complaint-card {
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+        width: 300px;
+        transition: transform 0.3s ease;
+      }
 
-<br><br><br><br><br><br>
-    
-    <table class="table table-striped">
-        <tr>
+      .complaint-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+      }
 
-            <th>Sl.no</th>
-            <th>Complaint</th>
-            <th>Reply</th>
-            <th>Date</th>
-            <th></th>
-        </tr>
+      .card-header {
+        display: flex;
+        justify-content: space-between;
+        border-bottom: 1px solid #eee;
+        padding-bottom: 10px;
+        margin-bottom: 15px;
+      }
 
-        {%for i in comp%}
+      .complaint-number {
+        font-weight: bold;
+        color: #555;
+      }
 
-        <tr>
-            <td>{{forloop.counter}}</td>
-            <td>{{i.complaint}}</td>
-            <td>{{i.reply}}</td>
-            <td>{{i.date}}</td>
-            <td><a href="/admin_send_reply/{{i.complaintid}}">Send Reply</a></td>
-        </tr>
+      .complaint-date {
+        color: #777;
+        font-size: 0.9em;
+      }
 
-        {%endfor%}
-    </table>
-<br><br><br><br>
+      .complaint-content {
+        margin-bottom: 15px;
+      }
 
-{%include 'footer.html'%}
+      .complaint-text {
+        font-weight: bold;
+        margin-bottom: 10px;
+      }
+
+      .reply-text {
+        color: #555;
+        font-style: italic;
+        margin-bottom: 15px;
+        padding-left: 10px;
+        border-left: 3px solid #ddd;
+      }
+
+      .action-button {
+        display: inline-block;
+        background-color: #4285f4;
+        color: white;
+        padding: 8px 16px;
+        border-radius: 4px;
+        text-decoration: none;
+        text-align: center;
+        transition: background-color 0.3s ease;
+      }
+
+      .action-button:hover {
+        background-color: #3367d6;
+      }
+
+      .page-title {
+        text-align: center;
+        margin: 20px 0;
+        color: #333;
+      }
+
+      .no-reply {
+        color: #f44336;
+        font-style: italic;
+      }
+    </style>
+  </head>
+  <body>
+    {% include 'admin_header.html' %}
+
+    <br /><br /><br /><br /><br /><br /><br />
+
+    <h2 class="page-title" style="color: white">Complaint Management</h2>
+
+    <div class="card-container">
+      {% for i in comp %}
+      <div class="complaint-card">
+        <div class="card-header">
+          <span class="complaint-number">#{{ forloop.counter }}</span>
+          <span class="complaint-date" style="color: black;">{{ i.date }}</span>
+        </div>
+        <div class="complaint-content">
+          <div class="complaint-text" style="color: black;">{{ i.complaint }}</div>
+          <div class="complaint-user" style="color: black;">
+            <strong>From:</strong> {{ i.senderid.username }}
+          </div>
+          <div class="reply-text" style="color: black;">
+            {% if i.reply %} {{ i.reply }} {% else %}
+            <span class="no-reply">No reply yet</span>
+            {% endif %}
+          </div>
+        </div>
+        <a href="/admin_send_reply/{{ i.complaintid }}" class="action-button"
+          >Send Reply</a
+        >
+      </div>
+      {% endfor %}
+    </div>
+
+    {% include 'footer.html' %}
+  </body>
+</html>

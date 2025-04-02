@@ -85,6 +85,7 @@ class SeatBooking(models.Model):
     audience = models.ForeignKey('Audience', null=True, blank=True, on_delete=models.CASCADE)
     filmmaker = models.ForeignKey('Filmmaker', null=True, blank=True, on_delete=models.CASCADE)
     payment_status = models.CharField(max_length=20)
+    film=models.ForeignKey('Film', on_delete=models.CASCADE,null=True)
     booking_date = models.DateTimeField()
 
 class MarketingCampaign(models.Model):
